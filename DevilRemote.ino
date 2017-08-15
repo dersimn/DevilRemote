@@ -40,6 +40,8 @@ void setup() {
   setup_MQTT();
   
   setup_VolumeHandler();
+
+  setup_Maintanance();
 }
 
 void loop() {
