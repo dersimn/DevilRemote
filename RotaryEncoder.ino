@@ -2,7 +2,6 @@
 
 Encoder myEnc(D3, D2);
 
-long oldPosition  = 0;
 bool isButtonPressed;
 long lastUpdateMillis = 0;
 
