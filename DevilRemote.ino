@@ -1,5 +1,6 @@
 #include "default_config.h"
 #include "default_wifi.h"
+#include "handy_functions.h"
 
 #include <Log.h>
 #include <LogModule.h>
