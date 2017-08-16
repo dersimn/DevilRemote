@@ -24,8 +24,14 @@ void setup_VolumeSync() {
 
 void loop_VolumeSync() {
   int recv = softSerial.read();
-  if ( recv != -1 ) {
-    Serial.println( recv );
+  
+  if ( recv == TURN_ON ) {
+    real_power = true;
+    power_set( true );
+  }
+  if ( recv == TURN_OFF ) {
+    real_power = false;
+    power_set( false );
   }
 }
 
