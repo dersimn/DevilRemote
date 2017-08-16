@@ -10,7 +10,9 @@ int callbackCount = 0;
 void setup_MQTT() {
   mqttClient.setServer(MQTT_SERVER, 1883);
   mqttClient.setCallback(mqtt_callback);
-  mqtt_reconnect();
+  if (WiFi.status() == WL_CONNECTED) {
+    mqtt_reconnect();
+  }
 
   reconnectThread.onRun(reconnectFunction);
   reconnectThread.setInterval(60 * 1000);
@@ -24,7 +26,9 @@ void loop_MQTT() {
 void reconnectFunction() {
   if (!mqttClient.connected()) {
     Log.warn("MQTT Connection lost");
-    mqtt_reconnect();
+    if (WiFi.status() == WL_CONNECTED) {
+      mqtt_reconnect(); 
+    }
   }
 }
 void mqtt_reconnect() {
