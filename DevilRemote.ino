@@ -40,6 +40,7 @@ void setup() {
   setup_MQTT();
   
   setup_VolumeHandler();
+  setup_VolumeSync();
 
   setup_Maintanance();
 }
