@@ -1,4 +1,4 @@
-#define VOLUME_MAX  27
+#define VOLUME_MAX  28
 #define VOLUME_MIN  0
 #define BASS_MAX    5
 #define BASS_MIN    -5
