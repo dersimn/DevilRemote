@@ -1,3 +1,5 @@
+Thread reconnectThread = Thread();
+
 struct callbackTopic {
   String topic;
   void (*callback)(String topic, String message);
@@ -9,25 +11,29 @@ void setup_MQTT() {
   mqttClient.setServer(MQTT_SERVER, 1883);
   mqttClient.setCallback(mqtt_callback);
   mqtt_reconnect();
+
+  reconnectThread.onRun(reconnectFunction);
+  reconnectThread.setInterval(60 * 1000);
+  threadControl.add(&reconnectThread);
 }
 
 void loop_MQTT() {
-  if (!mqttClient.connected()) {
-    mqtt_reconnect();
-  }
   mqttClient.loop();
 }
 
+void reconnectFunction() {
+  if (!mqttClient.connected()) {
+    Log.warn("MQTT Connection lost");
+    mqtt_reconnect();
+  }
+}
 void mqtt_reconnect() {
-  // Loop until we're reconnected
-  while (!mqttClient.connected()) {
-    Log.info(String("Attempting MQTT connection to ") + MQTT_SERVER );
-    if ( mqttClient.connect( MQTT_ID ) ) {
-      Log.info( String("MQTT Connected with ID: ") + MQTT_ID );
-    } else {
-      Log.error(String("MQTT Connection failed with rc=") + mqttClient.state() );
-      delay(5000);
-    }
+  Log.info(String("Attempting MQTT connection to ") + MQTT_SERVER );
+  if ( mqttClient.connect( MQTT_ID ) ) {
+    Log.info( String("MQTT Connected with ID: ") + MQTT_ID );
+  } else {
+    Log.error(String("MQTT Connection failed with rc=") + mqttClient.state() );
+    delay(5000);
   }
 }
 
