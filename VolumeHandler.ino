@@ -3,6 +3,8 @@
 #define BASS_MAX    5
 #define BASS_MIN    -5
 
+#define BRIGHT_PER_VOL  ( (LED_BRIGHT * 9)/VOLUME_MAX )
+
 bool power = false;
 int volume = 8;
 int bass = 0;
@@ -114,23 +116,11 @@ void enlightWheel() {
   
   if ( power ) {
     if ( volume ) {
-      /*
-        Volume 0        -> all off
-        Volume 1,2,3    -> LED 1: Brightness 85, 170, 255
-        Volume 4,5,6    -> LED 2: Brightness 85, 170, 255
-        Volume 7,8,9    -> LED 3: Brightness 85, 170, 255
-        Volume 10,11,12 -> LED 4: Brightness 85, 170, 255
-        Volume 13,14,15 -> LED 5: Brightness 85, 170, 255
-        Volume 16,17,18 -> LED 6: Brightness 85, 170, 255
-        Volume 19,20,21 -> LED 7: Brightness 85, 170, 255
-        Volume 22,23,24 -> LED 8: Brightness 85, 170, 255
-        Volume 25,26,27 -> LED 9: Brightness 85, 170, 255
-      */
-      led = (volume-1) / 3;
-      illum = ((volume-1) % 3 + 1) * LED_BRIGHT/3;
+      led =   ( volume * BRIGHT_PER_VOL ) / LED_BRIGHT;
+      illum = ( volume * BRIGHT_PER_VOL ) % LED_BRIGHT;
   
       for (int i = 0; i <= led; i++) {
-        leds[i] = CHSV( LED_HUE, LED_SAT, (i < led) ? LED_BRIGHT/3*3 : illum );
+        leds[i] = CHSV( LED_HUE, LED_SAT, (i < led) ? LED_BRIGHT : illum );
       }
     }
   }
