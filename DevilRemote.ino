@@ -48,6 +48,7 @@ void setup() {
 void loop() {
   loop_MQTT();
   loop_RotaryEncoder();
+  loop_VolumeSync();
 
   threadControl.run();
 }

@@ -1,5 +1,12 @@
 #include <SoftwareSerial.h>
 
+#define TURN_ON       161
+#define TURN_OFF      177
+#define VOLUME_UP     162
+#define VOLUME_DOWN   163
+#define BASS_UP       164
+#define BASS_DOWN     165
+
 SoftwareSerial softSerial(D5,D6);
 Thread syncThread = Thread();
 
@@ -15,16 +22,41 @@ void setup_VolumeSync() {
   threadControl.add(&syncThread);
 }
 
+void loop_VolumeSync() {
+  int recv = softSerial.read();
+  if ( recv != -1 ) {
+    Serial.println( recv );
+  }
+}
+
 void syncVolume() {
-  if ( power ) {
+  if ( real_power ) {
     if ( real_volume - volume > 0 ) {
-      softSerial.write( 163 );
+      softSerial.write( VOLUME_DOWN );
       real_volume--;
     }
     if ( real_volume - volume < 0 ) {
-      softSerial.write( 162 );
+      softSerial.write( VOLUME_UP );
       real_volume++;
+    }
+    if ( real_bass - bass > 0 ) {
+      softSerial.write( BASS_DOWN );
+      real_bass--;
+    }
+    if ( real_bass - bass < 0 ) {
+      softSerial.write( BASS_UP );
+      real_bass++;
     } 
+  }
+
+  // Check after Volume, to give the box one loop time to power up
+  if (  real_power && !power ) {
+    softSerial.write( TURN_OFF );
+    real_power = false;
+  }
+  if ( !real_power &&  power ) {
+    softSerial.write( TURN_ON );
+    real_power = true;
   }
 }
 
