@@ -43,10 +43,13 @@ void mqtt_reconnect() {
 }
 
 void mqtt_subscribe(String topic, void (*callback)(String topic, String message) ) {
-  char topic_char[100];
-  topic.toCharArray(topic_char, 100);
+  String prefix = String(MQTT_PREFIX);
+  String tmp = prefix + "/" + BOARD_ID + topic;
   
-  callbackList[callbackCount].topic = topic;
+  char topic_char[100];
+  tmp.toCharArray(topic_char, 100);
+  
+  callbackList[callbackCount].topic = tmp;
   callbackList[callbackCount].callback = callback;
   callbackCount++;
   
@@ -68,10 +71,13 @@ void mqtt_callback(char* topic_char, byte* payload, unsigned int length) {
 }
 
 void mqtt_publish(String topic, String message) {
+  String prefix = String(MQTT_PREFIX);
+  String tmp = prefix + "/" + BOARD_ID + topic;
+  
   char topic_char[100];
   char msg_char[500];
 
-  topic.toCharArray(topic_char, 100);
+  tmp.toCharArray(topic_char, 100);
   message.toCharArray(msg_char, 500);
   
   mqttClient.publish(topic_char, msg_char);    
