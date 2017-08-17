@@ -1,19 +1,20 @@
+#include <DNSServer.h>
+#include <ESP8266WebServer.h>
+#include <WiFiManager.h>
+
 Thread wifiThread = Thread();
 
 void setup_WiFi() {
-  WiFi.softAPdisconnect(true);
-  Log.info(String("Connecting to Wifi SSID ") + ssid);
-  WiFi.begin(ssid, password);
+  Log.info( String("Connecting to Wifi SSID: ") + WiFi.SSID() );
 
-  for (int i = 0; i < 10; i++) {
-    if (WiFi.status() != WL_CONNECTED) {
-      delay(500);
-    }
+  WiFiManager wifiManager;
+  wifiManager.setTimeout(180);
+
+  if ( !wifiManager.autoConnect() ) {
+    Log.error("WiFi failed to connect and hit timeout");
   }
   if (WiFi.status() == WL_CONNECTED) {
-    Log.info(String("Connected with IP: ") + WiFi.localIP().toString() );
-  } else {
-    Log.warn("Could NOT connect to WiFi");
+    Log.info(String("WiFi connected with IP: ") + WiFi.localIP().toString() );
   }
 
   wifiThread.onRun(wifiFunction);
