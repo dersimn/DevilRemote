@@ -8,7 +8,7 @@ void setup_WiFi() {
   wifiManager.setTimeout(180);
   wifiManager.setAPCallback(enteredConfigModeCallback);
 
-  if ( !wifiManager.autoConnect() ) {
+  if ( !wifiManager.autoConnect(BOARD_ID_CHAR) ) {
     Log.error("WiFi failed to connect and hit timeout");
   }
   if (WiFi.status() == WL_CONNECTED) {

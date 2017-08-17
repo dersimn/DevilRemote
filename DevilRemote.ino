@@ -29,7 +29,12 @@ PubSubClient mqttClient(espClient);
 
 CRGB leds[LED_COUNT];
 
+String BOARD_ID = String("DevilRemote")+ESP.getChipId();
+char   BOARD_ID_CHAR[50];
+
 void setup() {
+  BOARD_ID.toCharArray(BOARD_ID_CHAR, 50);
+  
   Serial.begin(115200);
   Log.addModule(&serialModule);
   Log.info("Initializing 'DevilRemote'");

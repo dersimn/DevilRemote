@@ -34,12 +34,8 @@ void reconnectFunction() {
 void mqtt_reconnect() {
   Log.info(String("Attempting MQTT connection to ") + MQTT_SERVER );
   
-  String mqtt_id = String("DevilRemote")+ESP.getChipId() ;
-  char mqtt_id_char[100];
-  mqtt_id.toCharArray(mqtt_id_char, 100);
-  
-  if ( mqttClient.connect( mqtt_id_char ) ) {
-    Log.info( String("MQTT Connected with ID: ") + mqtt_id );
+  if ( mqttClient.connect( BOARD_ID_CHAR ) ) {
+    Log.info( String("MQTT Connected with ID: ") + BOARD_ID );
   } else {
     Log.error(String("MQTT Connection failed with rc=") + mqttClient.state() );
     delay(5000);
