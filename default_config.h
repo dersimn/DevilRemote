@@ -1,5 +1,4 @@
 #define MQTT_SERVER     "10.30.21.20"
-#define MQTT_ID         "DevilRemote"
 
 #define LED_COUNT       12
 #define LED_HUE         170
