@@ -1,14 +1,12 @@
-#include <DNSServer.h>
-#include <ESP8266WebServer.h>
-#include <WiFiManager.h>
-
 Thread wifiThread = Thread();
 
 void setup_WiFi() {
   Log.info( String("Connecting to Wifi SSID: ") + WiFi.SSID() );
 
   WiFiManager wifiManager;
+  wifiManager.setDebugOutput(false);
   wifiManager.setTimeout(180);
+  wifiManager.setAPCallback(enteredConfigModeCallback);
 
   if ( !wifiManager.autoConnect() ) {
     Log.error("WiFi failed to connect and hit timeout");
@@ -26,5 +24,11 @@ void wifiFunction() {
   if (WiFi.status() != WL_CONNECTED) {
     Log.warn("WiFi Connection lost");
   }
+}
+
+void enteredConfigModeCallback(WiFiManager* myWiFiManager) {
+  Log.info("WiFiManager entered config mode");
+  Log.info(String("SSID: ") + myWiFiManager->getConfigPortalSSID() );
+  Log.info(String("IP: ") + WiFi.softAPIP().toString() );
 }
 
