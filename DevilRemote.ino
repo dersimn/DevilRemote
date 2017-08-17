@@ -46,9 +46,17 @@ void setup() {
   setup_VolumeSync();
 
   setup_Maintanance();
+
+  Log.info("Setup done");
 }
 
 void loop() {
+  static bool enteredLoop = false;
+  if ( !enteredLoop ) {
+    enteredLoop = true;
+    Log.info("Entering loop()");
+  }
+  
   loop_MQTT();
   loop_RotaryEncoder();
   loop_VolumeSync();
