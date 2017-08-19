@@ -54,6 +54,7 @@ void mqtt_subscribe(String topic, void (*callback)(String topic, String message)
   callbackCount++;
   
   mqttClient.subscribe(topic_char);
+  Log.info(String("MQTT subscribed to topic: ")+tmp);
 }
 
 void mqtt_callback(char* topic_char, byte* payload, unsigned int length) {
