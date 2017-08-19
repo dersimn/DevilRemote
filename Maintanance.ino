@@ -20,5 +20,9 @@ void uptimePublisher() {
 void infoPublisher() {
   mqtt_publish("/maintenance/id", String("ESP")+ESP.getChipId() );
   mqtt_publish("/maintenance/description", String(DESCRIPTION) );
+
+  publishPower();
+  publishVolume();
+  publishBass();
 }
 
