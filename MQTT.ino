@@ -27,7 +27,10 @@ void reconnectFunction() {
   if (!mqttClient.connected()) {
     Log.warn("MQTT Connection lost");
     if (WiFi.status() == WL_CONNECTED) {
-      mqtt_reconnect(); 
+      mqtt_reconnect();
+      if ( mqttClient.connected() ) {
+        mqtt_resubscribe();
+      }
     }
   }
 }
@@ -55,6 +58,18 @@ void mqtt_subscribe(String topic, void (*callback)(String topic, String message)
   
   mqttClient.subscribe(topic_char);
   Log.info(String("MQTT subscribed to topic: ")+tmp);
+}
+int mqtt_resubscribe() {
+  int count = 0;
+  for (int i = 0; i < callbackCount; i++) {
+    char topic_char[100];
+    callbackList[i].topic.toCharArray(topic_char, 100);
+
+    mqttClient.subscribe(topic_char);
+    Log.info(String("MQTT subscribed to topic: ")+callbackList[i].topic);
+    count++;
+  }
+  return count;
 }
 
 void mqtt_callback(char* topic_char, byte* payload, unsigned int length) {
