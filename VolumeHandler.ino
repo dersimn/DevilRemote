@@ -3,7 +3,7 @@
 #define BASS_MAX    5
 #define BASS_MIN    -5
 
-#define BRIGHT_PER_VOL  ( (LED_BRIGHT * 9)/VOLUME_MAX )
+#define BRIGHT_PER_VOL  ( (LED_BRIGHT * LED_COUNT_WHEEL)/VOLUME_MAX )
 
 bool power = false;
 int volume = 8;
@@ -112,7 +112,7 @@ void enlightWheel() {
   // All off to start clean
   fill_solid( leds, LED_COUNT, CHSV( 0, 0, 0) );
   // Power indicator blue or red
-  leds[10] = CHSV( (power) ? LED_HUE : 0, 255, LED_BRIGHT );
+  leds[LED_POWER_ID] = CHSV( (power) ? LED_HUE : 0, 255, LED_BRIGHT );
   
   if ( power ) {
     if ( volume ) {
