@@ -1,12 +1,10 @@
-![System](https://images-na.ssl-images-amazon.com/images/I/41LF%2BbP1QDL._SY355_.jpg)
+After [reverse engineering](https://github.com/dersimn/Teufel-CC-21-RC-Reverse-Engineering) the Teufel CC 21 RC, I was able to build a replacement for the original remote using an ESP8266 with Arduino IDE.
 
-After [reverse engineering](https://github.com/dersimn/Teufel-CC-21-RC-Reverse-Engineering) the Teufel CC 21 RC, I was able to build a replacement for the original remote using an ESP8266 with Arduino IDE:
+## Video
 
 [![YouTube](http://img.youtube.com/vi/U_jX7Qgj51E/0.jpg)](https://www.youtube.com/watch?v=U_jX7Qgj51E)
 
 ## Used parts
-
-![Warning](https://cdn2.iconfinder.com/data/icons/freecns-cumulus/32/519791-101_Warning-128.png)
 
 > I'm not responsible for damages to your sound box, when you rebuild this project!
 > If draining current from the +5V power line of your box, always use a fuse.
@@ -26,17 +24,17 @@ Currently the MQTT server IP is hard-coded in `default_config.h`.
 
 You can also choose an prefix for your MQTT topics. By default the topics are
 
-- `/devices/DevilRemote2693416/hifi/power/command`
-- `/devices/DevilRemote2693416/hifi/power/state`
-- `/devices/DevilRemote2693416/hifi/volume/command`
-- `/devices/DevilRemote2693416/hifi/volume/state`
-- `/devices/DevilRemote2693416/hifi/bass/command`
-- `/devices/DevilRemote2693416/hifi/bass/state`
+	/devices/DevilRemote2693416/hifi/power/command 
+	/devices/DevilRemote2693416/hifi/power/state 
+	/devices/DevilRemote2693416/hifi/volume/command 
+	/devices/DevilRemote2693416/hifi/volume/state 
+	/devices/DevilRemote2693416/hifi/bass/command 
+	/devices/DevilRemote2693416/hifi/bass/state 
 
-- `/devices/DevilRemote2693416/maintenance/id`
-- `/devices/DevilRemote2693416/maintenance/description`
-- `/devices/DevilRemote2693416/maintenance/uptime`
-- `/devices/DevilRemote2693416/maintenance/uptime/ms`
+	/devices/DevilRemote2693416/maintenance/id 
+	/devices/DevilRemote2693416/maintenance/description 
+	/devices/DevilRemote2693416/maintenance/uptime 
+	/devices/DevilRemote2693416/maintenance/uptime/ms 
 
 using the ESP ID to distinguish topics of multiple devices.
 
