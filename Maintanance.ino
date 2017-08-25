@@ -13,12 +13,12 @@ void setup_Maintanance() {
 
 void uptimePublisher() {
   unsigned long time = millis();
-  mqtt_publish("/maintenance/uptime/ms", String(time) );
-  mqtt_publish("/maintenance/uptime",    String(time/1000) );
+  mqtt_publish("maintenance/uptime/ms", String(time) );
+  mqtt_publish("maintenance/uptime",    String(time/1000) );
 }
 
 void infoPublisher() {
-  mqtt_publish("/maintenance/id", String("ESP")+ESP.getChipId() );
+  mqtt_publish("maintenance/id", String("ESP")+ESP.getChipId() );
 
   publishPower();
   publishVolume();

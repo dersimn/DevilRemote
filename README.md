@@ -30,17 +30,16 @@ Currently the MQTT server IP is hard-coded in `default_config.h`.
 
 You can also choose an prefix for your MQTT topics. By default the topics are
 
-	/devices/DevilRemote2693416/hifi/power/command 
-	/devices/DevilRemote2693416/hifi/power/state 
-	/devices/DevilRemote2693416/hifi/volume/command 
-	/devices/DevilRemote2693416/hifi/volume/state 
-	/devices/DevilRemote2693416/hifi/bass/command 
-	/devices/DevilRemote2693416/hifi/bass/state 
+	dersimn/set/DevilRemote1234567/hifi/power
+	dersimn/status/DevilRemote1234567/hifi/power
+	dersimn/set/DevilRemote1234567/hifi/volume
+	dersimn/status/DevilRemote1234567/hifi/volume
+	dersimn/set/DevilRemote1234567/hifi/bass
+	dersimn/status/DevilRemote1234567/hifi/bass
 
-	/devices/DevilRemote2693416/maintenance/id 
-	/devices/DevilRemote2693416/maintenance/description 
-	/devices/DevilRemote2693416/maintenance/uptime 
-	/devices/DevilRemote2693416/maintenance/uptime/ms 
+	dersimn/status/DevilRemote1234567/maintenance/id 
+	dersimn/status/DevilRemote1234567/maintenance/uptime 
+	dersimn/status/DevilRemote1234567/maintenance/uptime/ms 
 
 using the ESP ID to distinguish topics of multiple devices.
 
@@ -48,6 +47,10 @@ using the ESP ID to distinguish topics of multiple devices.
 
 Recommended item definition:
 
-	Switch Hifi_Teufel_Power {mqtt=">[mosquitto:/devices/DevilRemote2693416/hifi/power/command:command:*:default], <[mosquitto:/devices/DevilRemote2693416/hifi/power/state:state:default]", autoupdate="false"}
-	Number Hifi_Teufel_Volume {mqtt=">[mosquitto:/devices/DevilRemote2693416/hifi/volume/command:command:*:default], <[mosquitto:/devices/DevilRemote2693416/hifi/volume/state:state:default]", autoupdate="false"}
-	Number Hifi_Teufel_Bass {mqtt=">[mosquitto:/devices/DevilRemote2693416/hifi/bass/command:command:*:default], <[mosquitto:/devices/DevilRemote2693416/hifi/bass/state:state:default]", autoupdate="false"}
+	Switch Hifi_Teufel_Power  {mqtt=">[mosquitto:dersimn/set/DevilRemote1234567/hifi/power:command:*:default],  <[mosquitto:dersimn/status/DevilRemote1234567/hifi/power:state:default]",  autoupdate="false"}
+	Number Hifi_Teufel_Volume {mqtt=">[mosquitto:dersimn/set/DevilRemote1234567/hifi/volume:command:*:default], <[mosquitto:dersimn/status/DevilRemote1234567/hifi/volume:state:default]", autoupdate="false"}
+	Number Hifi_Teufel_Bass   {mqtt=">[mosquitto:dersimn/set/DevilRemote1234567/hifi/bass:command:*:default],   <[mosquitto:dersimn/status/DevilRemote1234567/hifi/bass:state:default]",   autoupdate="false"}
+
+## Credits
+
+This project follows [Oliver "owagner" Wagner](https://github.com/owagner)'s architectural proposal for an [mqtt-smarthome](https://github.com/mqtt-smarthome/mqtt-smarthome).

@@ -11,11 +11,12 @@
 /*
  * Build MQTT topics like
  *     
- *     PREFIX   ID              SERVICE
- *     /devices/DevilRemote0815/hifi/volume
+ *     PREFIX  CMD    DEVICE          SERVICE
+ *     dersimn/status/DevilRemote0815/hifi/volume
+ *     dersimn/set   /DevilRemote0815/hifi/volume
  *     
  * ID and services will be added in file MQTT.ino
  */
-#define MQTT_PREFIX     "/devices"
+#define MQTT_PREFIX     "dersimn"
 
 

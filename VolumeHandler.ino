@@ -21,9 +21,9 @@ void setup_VolumeHandler() {
   publishVolume();
   publishBass();
 
-  mqtt_subscribe("/hifi/power/command",  power_subscribe);
-  mqtt_subscribe("/hifi/volume/command", volume_subscribe);
-  mqtt_subscribe("/hifi/bass/command",   bass_subscribe);
+  mqtt_subscribe("hifi/power",  power_subscribe);
+  mqtt_subscribe("hifi/volume", volume_subscribe);
+  mqtt_subscribe("hifi/bass",   bass_subscribe);
 }
 
 bool power_toggle() {
@@ -96,13 +96,13 @@ void bass_subscribe(String topic, String message) {
 }
 
 void publishPower() {
-  mqtt_publish("/hifi/power/state", (power) ? "ON" : "OFF" );
+  mqtt_publish("hifi/power", (power) ? "ON" : "OFF" );
 }
 void publishVolume() {
-  mqtt_publish("/hifi/volume/state", String(volume) );
+  mqtt_publish("hifi/volume", String(volume) );
 }
 void publishBass() {
-  mqtt_publish("/hifi/bass/state", String(bass) );
+  mqtt_publish("hifi/bass", String(bass) );
 }
 
 void enlightWheel() {
