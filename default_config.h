@@ -18,5 +18,4 @@
  */
 #define MQTT_PREFIX     "/devices"
 
-#define DESCRIPTION     "DevilRemote Project - WiFi enabled replacement for 'Teufel CC 21 RC'"
 
