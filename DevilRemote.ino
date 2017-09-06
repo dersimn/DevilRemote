@@ -1,8 +1,9 @@
 #include "default_config.h"
 #include "handy_functions.h"
 
-#include <Log.h>
-#include <LogModule.h>
+#include <GenericLog.h>
+#include <NamedLog.h>
+#include <LogHandler.h>
 #include <LogSerialModule.h>
 
 #include <Thread.h>
@@ -19,8 +20,12 @@
 #include <FastLED.h>
 #include <NeoPixelBus.h>
 
-Log& Log = Log::getInstance();
-LogSerialModule serialModule;
+LogHandler logHandler;
+LogSerialModule serialModule(115200);
+
+GenericLog Log    (logHandler);
+NamedLog   LogWiFi(logHandler, "WiFi");
+NamedLog   LogMqtt(logHandler, "MQTT");
 
 ThreadController threadControl = ThreadController();
 
@@ -36,7 +41,7 @@ void setup() {
   BOARD_ID.toCharArray(BOARD_ID_CHAR, 50);
   
   Serial.begin(115200);
-  Log.addModule(&serialModule);
+  logHandler.addModule(&serialModule);
   Log.info("Initializing 'DevilRemote'");
   Log.info( String("ESP ID: ") + ESP.getChipId() );
 

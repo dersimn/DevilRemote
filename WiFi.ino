@@ -1,7 +1,7 @@
 Thread wifiThread = Thread();
 
 void setup_WiFi() {
-  Log.info( String("Connecting to Wifi SSID: ") + WiFi.SSID() );
+  LogWiFi.info( String("Connecting to Wifi SSID: ") + WiFi.SSID() );
 
   WiFiManager wifiManager;
   wifiManager.setDebugOutput(false);
@@ -9,10 +9,10 @@ void setup_WiFi() {
   wifiManager.setAPCallback(enteredConfigModeCallback);
 
   if ( !wifiManager.autoConnect(BOARD_ID_CHAR) ) {
-    Log.error("WiFi failed to connect and hit timeout");
+    LogWiFi.error("Failed to connect and hit timeout");
   }
   if (WiFi.status() == WL_CONNECTED) {
-    Log.info(String("WiFi connected with IP: ") + WiFi.localIP().toString() );
+    LogWiFi.info(String("Connected with IP: ") + WiFi.localIP().toString() );
   }
 
   wifiThread.onRun(wifiFunction);
@@ -22,13 +22,13 @@ void setup_WiFi() {
 
 void wifiFunction() {
   if (WiFi.status() != WL_CONNECTED) {
-    Log.warn("WiFi Connection lost");
+    LogWiFi.warn("Connection lost");
   }
 }
 
 void enteredConfigModeCallback(WiFiManager* myWiFiManager) {
-  Log.info("WiFiManager entered config mode");
-  Log.info(String("SSID: ") + myWiFiManager->getConfigPortalSSID() );
-  Log.info(String("IP: ") + WiFi.softAPIP().toString() );
+  LogWiFi.info("WiFiManager entered config mode");
+  LogWiFi.info(String("SSID: ") + myWiFiManager->getConfigPortalSSID() );
+  LogWiFi.info(String("IP: ") + WiFi.softAPIP().toString() );
 }
 

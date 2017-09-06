@@ -25,7 +25,7 @@ void loop_MQTT() {
 
 void reconnectFunction() {
   if (!mqttClient.connected()) {
-    Log.warn("MQTT Connection lost");
+    LogMqtt.warn("Connection lost");
     if (WiFi.status() == WL_CONNECTED) {
       mqtt_reconnect();
       if ( mqttClient.connected() ) {
@@ -35,12 +35,12 @@ void reconnectFunction() {
   }
 }
 void mqtt_reconnect() {
-  Log.info(String("Attempting MQTT connection to ") + MQTT_SERVER );
+  LogMqtt.info(String("Attempting MQTT connection to ") + MQTT_SERVER );
   
   if ( mqttClient.connect( BOARD_ID_CHAR ) ) {
-    Log.info( String("MQTT Connected with ID: ") + BOARD_ID );
+    LogMqtt.info( String("Connected with ID: ") + BOARD_ID );
   } else {
-    Log.error(String("MQTT Connection failed with rc=") + mqttClient.state() );
+    LogMqtt.error(String("Connection failed with rc=") + mqttClient.state() );
     delay(5000);
   }
 }
@@ -57,7 +57,7 @@ void mqtt_subscribe(String topic, void (*callback)(String topic, String message)
   callbackCount++;
   
   mqttClient.subscribe(topic_char);
-  Log.info(String("MQTT subscribed to topic: ")+tmp);
+  LogMqtt.info(String("Subscribed to topic: ")+tmp);
 }
 int mqtt_resubscribe() {
   int count = 0;
@@ -66,7 +66,7 @@ int mqtt_resubscribe() {
     callbackList[i].topic.toCharArray(topic_char, 100);
 
     mqttClient.subscribe(topic_char);
-    Log.info(String("MQTT subscribed to topic: ")+callbackList[i].topic);
+    LogMqtt.info(String("Re-Subscribed to topic: ")+callbackList[i].topic);
     count++;
   }
   return count;
