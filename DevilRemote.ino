@@ -17,6 +17,10 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
+#include <ESP8266mDNS.h>
+#include <WiFiUdp.h>
+#include <ArduinoOTA.h>
+
 #include <FastLED.h>
 #include <NeoPixelBus.h>
 
@@ -51,6 +55,7 @@ void setup() {
 
   setup_WiFi();
   setup_MQTT();
+  setup_ArduinoOTA();
   
   setup_VolumeHandler();
   setup_VolumeSync();
@@ -70,6 +75,7 @@ void loop() {
   loop_MQTT();
   loop_RotaryEncoder();
   loop_VolumeSync();
+  loop_ArduinoOTA();
 
   threadControl.run();
 }
