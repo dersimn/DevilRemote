@@ -1,0 +1,3 @@
+Switch Hifi_Teufel_Power                       {mqtt=">[mosquitto:dersimn/set/DevilRemote2693416/hifi/power:command:*:default],  <[mosquitto:dersimn/status/DevilRemote2693416/hifi/power:state:default]",  autoupdate="false"}
+Number Hifi_Teufel_Volume "Teufel Volume [%d]" {mqtt=">[mosquitto:dersimn/set/DevilRemote2693416/hifi/volume:command:*:default], <[mosquitto:dersimn/status/DevilRemote2693416/hifi/volume:state:default]", autoupdate="false"}
+Number Hifi_Teufel_Bass   "Teufel Volume [%d]" {mqtt=">[mosquitto:dersimn/set/DevilRemote2693416/hifi/bass:command:*:default],   <[mosquitto:dersimn/status/DevilRemote2693416/hifi/bass:state:default]",   autoupdate="false"}
