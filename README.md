@@ -42,14 +42,6 @@ You can also choose an prefix for your MQTT topics. By default the topics are
 
 using the ESP ID to distinguish topics of multiple devices.
 
-### OpenHAB items
-
-Recommended item definition:
-
-	Switch Hifi_Teufel_Power  {mqtt=">[mosquitto:dersimn/set/DevilRemote1234567/hifi/power:command:*:default],  <[mosquitto:dersimn/status/DevilRemote1234567/hifi/power:state:default]",  autoupdate="false"}
-	Number Hifi_Teufel_Volume {mqtt=">[mosquitto:dersimn/set/DevilRemote1234567/hifi/volume:command:*:default], <[mosquitto:dersimn/status/DevilRemote1234567/hifi/volume:state:default]", autoupdate="false"}
-	Number Hifi_Teufel_Bass   {mqtt=">[mosquitto:dersimn/set/DevilRemote1234567/hifi/bass:command:*:default],   <[mosquitto:dersimn/status/DevilRemote1234567/hifi/bass:state:default]",   autoupdate="false"}
-
 ## Credits
 
 This project follows [Oliver "owagner" Wagner](https://github.com/owagner)'s architectural proposal for an [mqtt-smarthome](https://github.com/mqtt-smarthome/mqtt-smarthome).
