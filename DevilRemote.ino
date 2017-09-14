@@ -1,28 +1,29 @@
 #include "default_config.h"
 #include "handy_functions.h"
 
-#include <GenericLog.h>
+#include <ESP8266WiFi.h>
+
+#include <GenericLog.h>         // https://github.com/dersimn/ArduinoUnifiedLog
 #include <NamedLog.h>
 #include <LogHandler.h>
 #include <LogSerialModule.h>
 
-#include <Thread.h>
-#include <ThreadRunOnce.h>
+#include <Thread.h>             // https://github.com/ivanseidel/ArduinoThread
 #include <ThreadController.h>
+#include <ThreadRunOnce.h>      // https://github.com/dersimn/ArduinoThreadRunOnce
 
+#include <WiFiManager.h>        // https://github.com/tzapu/WiFiManager
 #include <DNSServer.h>
 #include <ESP8266WebServer.h>
-#include <WiFiManager.h>
 
-#include <ESP8266WiFi.h>
-#include <PubSubClient.h>
+#include <PubSubClient.h>       // https://github.com/knolleary/pubsubclient
 
+#include <ArduinoOTA.h>
 #include <ESP8266mDNS.h>
 #include <WiFiUdp.h>
-#include <ArduinoOTA.h>
 
-#include <FastLED.h>
-#include <NeoPixelBus.h>
+#include <FastLED.h>            // https://github.com/FastLED/FastLED
+#include <NeoPixelBus.h>        // https://github.com/Makuna/NeoPixelBus
 
 LogHandler logHandler;
 LogSerialModule serialModule(115200);
