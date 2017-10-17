@@ -44,8 +44,9 @@ You can also choose an prefix for your MQTT topics. By default the topics are
 	dersimn/status/DevilRemote1234567/hifi/bass/base100
 	dersimn/set   /DevilRemote1234567/hifi/bass/base100
 
-	dersimn/status/DevilRemote1234567/maintenance/uptime 
-	dersimn/status/DevilRemote1234567/maintenance/uptime/ms 
+	dersimn/status/DevilRemote1234567/maintenance/uptime
+	dersimn/status/DevilRemote1234567/maintenance/uptime/ms
+	dersimn/status/DevilRemote1234567/maintenance/temperature
 
 using the ESP ID to distinguish topics of multiple devices.
 
