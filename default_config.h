@@ -19,4 +19,8 @@
  */
 #define MQTT_PREFIX     "dersimn"
 
-
+// Sensor_Dallas
+#define DS_ONE_WIRE_BUS       D7
+#define DS_MAX_DEVICES        5
+#define DS_INTERVAL           10000
+#define DS_PRECISION          12
