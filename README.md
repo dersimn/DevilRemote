@@ -30,12 +30,15 @@ Currently the MQTT server IP is hard-coded in `default_config.h`.
 
 You can also choose an prefix for your MQTT topics. By default the topics are
 
-	dersimn/set/DevilRemote1234567/hifi/power
 	dersimn/status/DevilRemote1234567/hifi/power
-	dersimn/set/DevilRemote1234567/hifi/volume
+	dersimn/set   /DevilRemote1234567/hifi/power
+	dersimn/set   /DevilRemote1234567/hifi/powertoggle
 	dersimn/status/DevilRemote1234567/hifi/volume
-	dersimn/set/DevilRemote1234567/hifi/bass
+	dersimn/set   /DevilRemote1234567/hifi/volume
+	dersimn/set   /DevilRemote1234567/hifi/volumediff
 	dersimn/status/DevilRemote1234567/hifi/bass
+	dersimn/set   /DevilRemote1234567/hifi/bass
+	dersimn/set   /DevilRemote1234567/hifi/bassdiff
 
 	dersimn/status/DevilRemote1234567/maintenance/uptime 
 	dersimn/status/DevilRemote1234567/maintenance/uptime/ms 

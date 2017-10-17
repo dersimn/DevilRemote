@@ -21,9 +21,12 @@ void setup_VolumeHandler() {
   publishVolume();
   publishBass();
 
-  mqtt_subscribe("hifi/power",  power_subscribe);
-  mqtt_subscribe("hifi/volume", volume_subscribe);
-  mqtt_subscribe("hifi/bass",   bass_subscribe);
+  mqtt_subscribe("hifi/power",      power_subscribe);
+  mqtt_subscribe("hifi/powertoggle",powertoggle_subscribe);
+  mqtt_subscribe("hifi/volume",     volume_subscribe);
+  mqtt_subscribe("hifi/volumediff", volumediff_subscribe);
+  mqtt_subscribe("hifi/bass",       bass_subscribe);
+  mqtt_subscribe("hifi/bassdiff",   bassdiff_subscribe);
 }
 
 bool power_toggle() {
@@ -43,8 +46,15 @@ bool power_set(bool state) {
   return power;
 }
 void power_subscribe(String topic, String message) {
-  if ( message == "ON" )  power_set(true);
-  if ( message == "OFF" ) power_set(false);
+  if ( message == "ON" )    power_set(true);
+  if ( message == "OFF" )   power_set(false);
+  if ( message == "true" )  power_set(true);
+  if ( message == "false" ) power_set(false);
+  if ( message == "1" )     power_set(true);
+  if ( message == "0" )     power_set(false);
+}
+void powertoggle_subscribe(String topic, String message) {
+  if ( message == "TOGGLE" ) power_toggle();
 }
 
 int volume_set(int newVal) {
@@ -76,6 +86,9 @@ int volume_rotary(int diff) {
 void volume_subscribe(String topic, String message) {
   volume_set( message.toInt() );
 }
+void volume_subscribe(String topic, String message) {
+  volume_change( message.toInt() );
+}
 
 int bass_set(int newVal) {
   if (power) bass = limit( newVal, BASS_MIN, BASS_MAX);
@@ -93,6 +106,9 @@ int bass_change(int diff) {
 }
 void bass_subscribe(String topic, String message) {
   bass_set( message.toInt() );
+}
+void bassdiff_subscribe(String topic, String message) {
+  bass_change( message.toInt() );
 }
 
 void publishPower() {
