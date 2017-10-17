@@ -32,13 +32,17 @@ You can also choose an prefix for your MQTT topics. By default the topics are
 
 	dersimn/status/DevilRemote1234567/hifi/power
 	dersimn/set   /DevilRemote1234567/hifi/power
-	dersimn/set   /DevilRemote1234567/hifi/powertoggle
+	dersimn/set   /DevilRemote1234567/hifi/power/toggle
 	dersimn/status/DevilRemote1234567/hifi/volume
 	dersimn/set   /DevilRemote1234567/hifi/volume
-	dersimn/set   /DevilRemote1234567/hifi/volumediff
+	dersimn/set   /DevilRemote1234567/hifi/volume/diff
+	dersimn/status/DevilRemote1234567/hifi/volume/base100
+	dersimn/set   /DevilRemote1234567/hifi/volume/base100
 	dersimn/status/DevilRemote1234567/hifi/bass
 	dersimn/set   /DevilRemote1234567/hifi/bass
-	dersimn/set   /DevilRemote1234567/hifi/bassdiff
+	dersimn/set   /DevilRemote1234567/hifi/bass/diff
+	dersimn/status/DevilRemote1234567/hifi/bass/base100
+	dersimn/set   /DevilRemote1234567/hifi/bass/base100
 
 	dersimn/status/DevilRemote1234567/maintenance/uptime 
 	dersimn/status/DevilRemote1234567/maintenance/uptime/ms 

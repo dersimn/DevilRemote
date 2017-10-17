@@ -21,12 +21,14 @@ void setup_VolumeHandler() {
   publishVolume();
   publishBass();
 
-  mqtt_subscribe("hifi/power",      power_subscribe);
-  mqtt_subscribe("hifi/powertoggle",powertoggle_subscribe);
-  mqtt_subscribe("hifi/volume",     volume_subscribe);
-  mqtt_subscribe("hifi/volumediff", volumediff_subscribe);
-  mqtt_subscribe("hifi/bass",       bass_subscribe);
-  mqtt_subscribe("hifi/bassdiff",   bassdiff_subscribe);
+  mqtt_subscribe("hifi/power",          power_subscribe);
+  mqtt_subscribe("hifi/power/toggle",   powertoggle_subscribe);
+  mqtt_subscribe("hifi/volume",         volume_subscribe);
+  mqtt_subscribe("hifi/volume/base100", volume100_subscribe);
+  mqtt_subscribe("hifi/volume/diff",    volumediff_subscribe);
+  mqtt_subscribe("hifi/bass",           bass_subscribe);
+  mqtt_subscribe("hifi/bass/base100",   bass100_subscribe);
+  mqtt_subscribe("hifi/bass/diff",      bassdiff_subscribe);
 }
 
 bool power_toggle() {
@@ -86,7 +88,10 @@ int volume_rotary(int diff) {
 void volume_subscribe(String topic, String message) {
   volume_set( message.toInt() );
 }
-void volume_subscribe(String topic, String message) {
+void volume100_subscribe(String topic, String message) {
+  volume_set( rescale(message.toInt(), 100, 28) );
+}
+void volumediff_subscribe(String topic, String message) {
   volume_change( message.toInt() );
 }
 
@@ -107,6 +112,9 @@ int bass_change(int diff) {
 void bass_subscribe(String topic, String message) {
   bass_set( message.toInt() );
 }
+void bass100_subscribe(String topic, String message) {
+  bass_set( rescale(message.toInt()-50, 50, 5) );
+}
 void bassdiff_subscribe(String topic, String message) {
   bass_change( message.toInt() );
 }
@@ -116,9 +124,11 @@ void publishPower() {
 }
 void publishVolume() {
   mqtt_publish("hifi/volume", String(volume) );
+  mqtt_publish("hifi/volume100", String( rescale(volume, 28, 100) ) );
 }
 void publishBass() {
   mqtt_publish("hifi/bass", String(bass) );
+  mqtt_publish("hifi/bass100", String( rescale(bass, 5, 50) + 50 ) );
 }
 
 void enlightWheel() {
