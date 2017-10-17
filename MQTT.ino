@@ -57,6 +57,7 @@ void mqtt_subscribe(String topic, void (*callback)(String topic, String message)
   callbackCount++;
   
   mqttClient.subscribe(topic_char);
+  mqttClient.loop();
   LogMqtt.info(String("Subscribed to topic: ")+tmp);
 }
 int mqtt_resubscribe() {
@@ -66,6 +67,7 @@ int mqtt_resubscribe() {
     callbackList[i].topic.toCharArray(topic_char, 100);
 
     mqttClient.subscribe(topic_char);
+    mqttClient.loop();
     LogMqtt.info(String("Re-Subscribed to topic: ")+callbackList[i].topic);
     count++;
   }
