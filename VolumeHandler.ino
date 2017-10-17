@@ -124,11 +124,11 @@ void publishPower() {
 }
 void publishVolume() {
   mqtt_publish("hifi/volume", String(volume) );
-  mqtt_publish("hifi/volume100", String( rescale(volume, 28, 100) ) );
+  mqtt_publish("hifi/volume/base100", String( rescale(volume, 28, 100) ) );
 }
 void publishBass() {
   mqtt_publish("hifi/bass", String(bass) );
-  mqtt_publish("hifi/bass100", String( rescale(bass, 5, 50) + 50 ) );
+  mqtt_publish("hifi/bass/base100", String( rescale(bass, 5, 50) + 50 ) );
 }
 
 void enlightWheel() {
