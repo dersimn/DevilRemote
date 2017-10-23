@@ -44,7 +44,8 @@ PubSubClient mqttClient(espClient);
 
 CRGB leds[LED_COUNT];
 
-String BOARD_ID = String("DevilRemote")+ESP.getChipId();
+const String ESP_ID = upperCaseStr(String(ESP.getChipId(), HEX));
+const String BOARD_ID = String("DevilRemote_")+ESP_ID;
 char   BOARD_ID_CHAR[50];
 String s = "";
 
@@ -58,7 +59,7 @@ void setup() {
   mqttModule.setMinimumLogLevel( 2 ); // WARN
   logHandler.addModule(&mqttModule);
   Log.info("Initializing 'DevilRemote'");
-  Log.info( String("ESP ID: ") + ESP.getChipId() );
+  Log.info( String("ESP ID: ") + ESP_ID );
 
   // Init Submodules
   setup_FastLED();
