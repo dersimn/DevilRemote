@@ -22,7 +22,6 @@ void setup_VolumeHandler() {
   publishBass();
 
   mqtt_subscribe("hifi/power",          power_subscribe);
-  mqtt_subscribe("hifi/power/toggle",   powertoggle_subscribe);
   mqtt_subscribe("hifi/volume",         volume_subscribe);
   mqtt_subscribe("hifi/volume/base100", volume100_subscribe);
   mqtt_subscribe("hifi/volume/diff",    volumediff_subscribe);
@@ -48,15 +47,13 @@ bool power_set(bool state) {
   return power;
 }
 void power_subscribe(String topic, String message) {
-  if ( message == "ON" )    power_set(true);
-  if ( message == "OFF" )   power_set(false);
-  if ( message == "true" )  power_set(true);
-  if ( message == "false" ) power_set(false);
-  if ( message == "1" )     power_set(true);
-  if ( message == "0" )     power_set(false);
-}
-void powertoggle_subscribe(String topic, String message) {
-  if ( message == "TOGGLE" ) power_toggle();
+  if ( message == "ON" )     { power_set(true);  return; }
+  if ( message == "OFF" )    { power_set(false); return; }
+  if ( message == "TOGGLE" ) { power_toggle();   return; }
+  if ( message == "true" )   { power_set(true);  return; }
+  if ( message == "false" )  { power_set(false); return; }
+  if ( message == "1" )      { power_set(true);  return; }
+  if ( message == "0" )      { power_set(false); return; }
 }
 
 int volume_set(int newVal) {
