@@ -40,29 +40,34 @@ void syncVolume() {
     if ( real_volume - volume > 0 ) {
       softSerial.write( VOLUME_DOWN );
       real_volume--;
+      return;
     }
     if ( real_volume - volume < 0 ) {
       softSerial.write( VOLUME_UP );
       real_volume++;
+      return;
     }
     if ( real_bass - bass > 0 ) {
       softSerial.write( BASS_DOWN );
       real_bass--;
+      return;
     }
     if ( real_bass - bass < 0 ) {
       softSerial.write( BASS_UP );
       real_bass++;
+      return;
     } 
   }
 
-  // Check after Volume, to give the box one loop time to power up
   if (  real_power && !power ) {
     softSerial.write( TURN_OFF );
     real_power = false;
+    return;
   }
   if ( !real_power &&  power ) {
     softSerial.write( TURN_ON );
     real_power = true;
+    return;
   }
 }
 
