@@ -18,7 +18,7 @@ void setup_VolumeSync() {
   softSerial.begin(19200);
 
   syncThread.onRun(syncVolume);
-  syncThread.setInterval(20);
+  syncThread.setInterval(35);
   threadControl.add(&syncThread);
 }
 
