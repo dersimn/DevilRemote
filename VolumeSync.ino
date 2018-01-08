@@ -8,7 +8,9 @@
 #define BASS_DOWN     165
 
 SoftwareSerial softSerial(D5,D6);
-Thread syncThread = Thread();
+Thread syncVolumeThread = Thread();
+Thread syncPowerThread = Thread();
+ThreadRunOnce enableVolumeSyncThread = ThreadRunOnce();
 
 bool real_power = false;
 int real_volume = 8;
@@ -17,9 +19,18 @@ int real_bass = 0;
 void setup_VolumeSync() {
   softSerial.begin(19200);
 
-  syncThread.onRun(syncVolume);
-  syncThread.setInterval(35);
-  threadControl.add(&syncThread);
+  syncVolumeThread.onRun(syncVolume);
+  syncVolumeThread.setInterval(20);
+  syncVolumeThread.enabled = false;
+  threadControl.add(&syncVolumeThread);
+
+  syncPowerThread.onRun(syncPower);
+  syncPowerThread.setInterval(100);
+  threadControl.add(&syncPowerThread);
+
+  enableVolumeSyncThread.onRun(enableVolumeSync);
+  enableVolumeSyncThread.enabled = false;
+  threadControl.add(&enableVolumeSyncThread);
 }
 
 void loop_VolumeSync() {
@@ -58,16 +69,28 @@ void syncVolume() {
       return;
     } 
   }
+}
 
+void syncPower() {
   if (  real_power && !power ) {
     softSerial.write( TURN_OFF );
     real_power = false;
+    
+    syncVolumeThread.enabled = false;
+    
     return;
   }
   if ( !real_power &&  power ) {
     softSerial.write( TURN_ON );
     real_power = true;
+
+    enableVolumeSyncThread.setRunOnce(500);
+    
     return;
   }
+}
+
+void enableVolumeSync() {
+  syncVolumeThread.enabled = true;
 }
 
