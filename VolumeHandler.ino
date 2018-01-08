@@ -60,7 +60,7 @@ void powertoggle_subscribe(String topic, String message) {
 }
 
 int volume_set(int newVal) {
-  if (power) volume = limit( newVal, VOLUME_MIN, VOLUME_MAX);
+  volume = limit( newVal, VOLUME_MIN, VOLUME_MAX);
 
   enlightWheel();
   publishVolume();
@@ -68,7 +68,7 @@ int volume_set(int newVal) {
   return volume;
 }
 int volume_change(int diff) {
-  if (power) volume = limit( volume+diff, VOLUME_MIN, VOLUME_MAX);
+  volume = limit( volume+diff, VOLUME_MIN, VOLUME_MAX);
 
   enlightWheel();
   publishVolume();
@@ -76,7 +76,7 @@ int volume_change(int diff) {
   return volume;
 }
 int volume_rotary(int diff) {
-  if (power) volume = limit( volume+diff, VOLUME_MIN, VOLUME_MAX);
+  volume = limit( volume+diff, VOLUME_MIN, VOLUME_MAX);
 
   enlightWheel();
 
@@ -96,14 +96,14 @@ void volumediff_subscribe(String topic, String message) {
 }
 
 int bass_set(int newVal) {
-  if (power) bass = limit( newVal, BASS_MIN, BASS_MAX);
+  bass = limit( newVal, BASS_MIN, BASS_MAX);
 
   publishBass();
 
   return bass;
 }
 int bass_change(int diff) {
-  if (power) bass = limit( bass+diff, BASS_MIN, BASS_MAX);
+  bass = limit( bass+diff, BASS_MIN, BASS_MAX);
 
   publishBass();
 
