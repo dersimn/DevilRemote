@@ -10,14 +10,14 @@ After [reverse engineering](https://github.com/dersimn/Teufel-CC-21-RC-Reverse-E
 
 [![Photo](https://github.com/dersimn/DevilRemote/blob/master/docs/IMG_3049.jpg?raw=true)](https://raw.githubusercontent.com/dersimn/DevilRemote/master/docs/IMG_3049.jpg)
 
-> I'm not responsible for damages to your sound box, when you rebuild this project!
-> If draining current from the +5V power line of your box, always use a fuse.
-> When building a self-powered device, consoder using opto-isolators for data lines.
+> I'm not responsible for damages to your sound box.
+> When draining power from the +5V power line, always use a fuse or any kind of over-current protection.
+> When building an externally powered device, consoder using opto-isolators for data lines.
 
 ### Used parts
 
 - [Wemos D1 mini](http://www.ebay.de/itm/D1-Mini-NodeMCU-Lua-ESP8266-ESP-12-WeMos-D1-Mini-WIFI-4M-Bytes-Module/381524981999?ssPageName=STRK%3AMEBIDX%3AIT&_trksid=p2057872.m2749.l2649)
-- [KY-040 Rotary Encoder](http://www.ebay.de/itm/5X-Drehgeber-Modul-Brick-Sensorentwicklungs-KY-040-fuer-Arduino-Kompatibel-DE/282229922649?ssPageName=STRK%3AMEBIDX%3AIT&_trksid=p2057872.m2749.l2649)
+- [KY-040 Rotary Encoder](http://www.ebay.de/itm/5X-Drehgeber-Modul-Brick-Sensorentwicklungs-KY-040-fuer-Arduino-Kompatibel-DE/282229922649?ssPageName=STRK%3AMEBIDX%3AIT&_trksid=p2057872.m2749.l2649) + [Cap Part 1](https://www.conrad.de/de/drehknopf-schwarz-o-x-h-253-mm-x-192-mm-cliff-cl172877b-1-st-705018.html) + [Cap Part 2](https://www.conrad.de/de/abdeckkappe-schwarz-passend-fuer-drehschalter-k12-cliff-cl177751-1-st-705203.html)
 - [WS2812 Ring](http://www.ebay.de/itm/LED-Ring-12-x-5050-RGB-LEDs-WS2812-integrierter-Treiber-NeoPixel-kompatibel/282280571725?ssPageName=STRK%3AMEBIDX%3AIT&_trksid=p2057872.m2749.l2649)
 - Breadboard & Wires
 - [Case](https://www.conrad.de/de/modul-gehaeuse-74-x-50-x-28-abs-schwarz-axxatronic-rx2010s-1-st-1279534.html)
