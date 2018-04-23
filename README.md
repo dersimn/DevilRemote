@@ -26,26 +26,28 @@ After [reverse engineering](https://github.com/dersimn/Teufel-CC-21-RC-Reverse-E
 
 ## Default settings
 
-Currently the MQTT server IP is hard-coded in `default_config.h`.
+Currently the MQTT server IP and Wifi credentials are hard-coded in `default_config.h`. You can also choose an prefix for your MQTT topics.
 
-You can also choose an prefix for your MQTT topics. By default the topics are
+### Default topics
 
-	dersimn/status/DevilRemote1234567/hifi/power
-	dersimn/set   /DevilRemote1234567/hifi/power
-	dersimn/status/DevilRemote1234567/hifi/volume
-	dersimn/set   /DevilRemote1234567/hifi/volume
-	dersimn/set   /DevilRemote1234567/hifi/volume/diff
-	dersimn/status/DevilRemote1234567/hifi/volume/base100
-	dersimn/set   /DevilRemote1234567/hifi/volume/base100
-	dersimn/status/DevilRemote1234567/hifi/bass
-	dersimn/set   /DevilRemote1234567/hifi/bass
-	dersimn/set   /DevilRemote1234567/hifi/bass/diff
-	dersimn/status/DevilRemote1234567/hifi/bass/base100
-	dersimn/set   /DevilRemote1234567/hifi/bass/base100
+The default topics are
 
-	dersimn/status/DevilRemote1234567/maintenance/uptime
-	dersimn/status/DevilRemote1234567/maintenance/uptime/ms
-	dersimn/status/DevilRemote1234567/maintenance/temperature
+	dersimn/status/DevilRemote_1234567/hifi
+	dersimn/set   /DevilRemote_1234567/hifi
+
+containing/receiving JSON payloads like:
+
+	{
+		"val": 0.22,
+		"bass": 0.2
+	}
+
+### Maintenance topics
+
+	dersimn/maintenance/DevilRemote_1234567/online
+	dersimn/maintenance/DevilRemote_1234567/uptime
+	dersimn/maintenance/DevilRemote_1234567/uptime/ms
+	dersimn/maintenance/DevilRemote_1234567/temperature
 
 using the ESP ID to distinguish topics of multiple devices.
 
