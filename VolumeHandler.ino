@@ -60,6 +60,8 @@ void publishHifi() {
   mqtt.publish(s+MQTT_PREFIX+"/status/"+BOARD_ID+"/hifi", output, true);
 }
 void val_set(float val) {
+  if ( !inRange(val, 0.0, 1.0) ) return;
+  
   if (val >= 1.0/28) {
     power_set(true);
     volume_set(rescale(val, 1.0, 28));
@@ -86,19 +88,15 @@ bool power_set(bool state) {
 }
 
 int volume_set(int newVal) {
-  volume = limit( newVal, VOLUME_MIN, VOLUME_MAX);
+  if ( inRange( newVal, VOLUME_MIN, VOLUME_MAX) ) {
+    volume = newVal;
+  } else {
+    return volume;
+  }
 
   enlightWheel();
   publishHifi();
 
-  return volume;
-}
-int volume_change(int diff) {
-  volume = limit( volume+diff, VOLUME_MIN, VOLUME_MAX);
-
-  enlightWheel();
-  publishHifi();
-  
   return volume;
 }
 int volume_rotary(int diff) {
@@ -113,14 +111,11 @@ int volume_rotary(int diff) {
 }
 
 int bass_set(int newVal) {
-  bass = limit( newVal, BASS_MIN, BASS_MAX);
-
-  publishHifi();
-
-  return bass;
-}
-int bass_change(int diff) {
-  bass = limit( bass+diff, BASS_MIN, BASS_MAX);
+  if ( inRange( newVal, BASS_MIN, BASS_MAX) ) {
+    bass = newVal;
+  } else {
+    return bass;
+  }
 
   publishHifi();
 
