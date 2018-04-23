@@ -29,7 +29,6 @@ void hifi_subscribe(String topic, String message) {
 
   DynamicJsonBuffer jsonBuffer;
   JsonVariant root = jsonBuffer.parse(message);
-  Log.info(message);
 
   if ( root.is<bool>() ) {
     power_set( root.as<bool>() );
