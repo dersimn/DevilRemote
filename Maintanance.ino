@@ -24,8 +24,6 @@ void uptimePublisher() {
 }
 
 void infoPublisher() {
-  publishPower();
-  publishVolume();
-  publishBass();
+  publishHifi();
 }
 

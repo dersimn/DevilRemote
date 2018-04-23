@@ -9,32 +9,71 @@ bool power = false;
 int volume = 8;
 int bass = 0;
 
-ThreadRunOnce publishVolumeThread = ThreadRunOnce();
+ThreadRunOnce publishThread = ThreadRunOnce();
 
 void setup_VolumeHandler() {
-  publishVolumeThread.onRun(publishVolume);
-  threadControl.add(&publishVolumeThread);
+  publishThread.onRun(publishHifi);
+  threadControl.add(&publishThread);
 
   // Post & Englight after initializing
   enlightWheel();
-  publishPower();
-  publishVolume();
-  publishBass();
+  publishHifi();
 
-  mqtt.subscribe("hifi/power",          power_subscribe);
-  mqtt.subscribe("hifi/volume",         volume_subscribe);
-  mqtt.subscribe("hifi/volume/base100", volume100_subscribe);
-  mqtt.subscribe("hifi/volume/diff",    volumediff_subscribe);
-  mqtt.subscribe("hifi/bass",           bass_subscribe);
-  mqtt.subscribe("hifi/bass/base100",   bass100_subscribe);
-  mqtt.subscribe("hifi/bass/diff",      bassdiff_subscribe);
+  mqtt.subscribe("hifi", hifi_subscribe);
+}
+
+void hifi_subscribe(String topic, String message) {
+  if ( message == "ON" )     { power_set(true);  return; }
+  if ( message == "OFF" )    { power_set(false); return; }
+  if ( message == "TOGGLE" ) { power_toggle();   return; }
+
+  DynamicJsonBuffer jsonBuffer;
+  JsonVariant root = jsonBuffer.parse(message);
+  Log.info(message);
+
+  if ( root.is<bool>() ) {
+    power_set( root.as<bool>() );
+    return;
+  }
+  if ( root.is<float>() || root.is<int>() ) {
+    val_set( root.as<float>() );
+    return;
+  }
+  if ( root.is<JsonObject>() ) {
+    JsonObject& rootObject = root.as<JsonObject>();
+    if ( rootObject.containsKey("val") ) {
+      val_set( rootObject["val"].as<float>() );
+    }
+    if ( rootObject.containsKey("bass") ) {
+      bass_set(rescale(rootObject["bass"].as<float>(), 1.0, 5));
+    }
+  }
+}
+void publishHifi() {
+  String output;
+  DynamicJsonBuffer jsonBuffer;
+
+  JsonObject& root = jsonBuffer.createObject();
+  root["val"] = (power) ? rescale(volume, 28, 1.0) : 0.0;
+  root["bass"] = rescale(bass, 5, 1.0);
+
+  root.printTo(output);
+  mqtt.publish("hifi", output);
+}
+void val_set(float val) {
+  if (val >= 1.0/28) {
+    power_set(true);
+    volume_set(rescale(val, 1.0, 28));
+  } else {
+    power_set(false);
+  }
 }
 
 bool power_toggle() {
   power = !power;
 
   enlightWheel();
-  publishPower();
+  publishHifi();
 
   return power;
 }
@@ -42,25 +81,16 @@ bool power_set(bool state) {
   power = state;
 
   enlightWheel();
-  publishPower();
+  publishHifi();
 
   return power;
-}
-void power_subscribe(String topic, String message) {
-  if ( message == "ON" )     { power_set(true);  return; }
-  if ( message == "OFF" )    { power_set(false); return; }
-  if ( message == "TOGGLE" ) { power_toggle();   return; }
-  if ( message == "true" )   { power_set(true);  return; }
-  if ( message == "false" )  { power_set(false); return; }
-  if ( message == "1" )      { power_set(true);  return; }
-  if ( message == "0" )      { power_set(false); return; }
 }
 
 int volume_set(int newVal) {
   volume = limit( newVal, VOLUME_MIN, VOLUME_MAX);
 
   enlightWheel();
-  publishVolume();
+  publishHifi();
 
   return volume;
 }
@@ -68,7 +98,7 @@ int volume_change(int diff) {
   volume = limit( volume+diff, VOLUME_MIN, VOLUME_MAX);
 
   enlightWheel();
-  publishVolume();
+  publishHifi();
   
   return volume;
 }
@@ -78,54 +108,24 @@ int volume_rotary(int diff) {
   enlightWheel();
 
   // When changing volume by rotary, post after 1s to prevent blocking
-  publishVolumeThread.setRunOnce(1000);
+  publishThread.setRunOnce(1000);
   
   return volume;  
-}
-void volume_subscribe(String topic, String message) {
-  volume_set( message.toInt() );
-}
-void volume100_subscribe(String topic, String message) {
-  volume_set( rescale(message.toInt(), 100, 28) );
-}
-void volumediff_subscribe(String topic, String message) {
-  volume_change( message.toInt() );
 }
 
 int bass_set(int newVal) {
   bass = limit( newVal, BASS_MIN, BASS_MAX);
 
-  publishBass();
+  publishHifi();
 
   return bass;
 }
 int bass_change(int diff) {
   bass = limit( bass+diff, BASS_MIN, BASS_MAX);
 
-  publishBass();
+  publishHifi();
 
   return bass;
-}
-void bass_subscribe(String topic, String message) {
-  bass_set( message.toInt() );
-}
-void bass100_subscribe(String topic, String message) {
-  bass_set( rescale(message.toInt()-50, 50, 5) );
-}
-void bassdiff_subscribe(String topic, String message) {
-  bass_change( message.toInt() );
-}
-
-void publishPower() {
-  mqtt.publish("hifi/power", (power) ? "ON" : "OFF" );
-}
-void publishVolume() {
-  mqtt.publish("hifi/volume", String(volume) );
-  mqtt.publish("hifi/volume/base100", String( rescale(volume, 28, 100) ) );
-}
-void publishBass() {
-  mqtt.publish("hifi/bass", String(bass) );
-  mqtt.publish("hifi/bass/base100", String( rescale(bass, 5, 50) + 50 ) );
 }
 
 void enlightWheel() {

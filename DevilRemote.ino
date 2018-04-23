@@ -16,6 +16,8 @@
 #include <PubSubClient.h>       // https://github.com/knolleary/pubsubclient
 #include <PubSubClientTools.h>  // https://github.com/dersimn/ArduinoPubSubClientTools
 
+#include <ArduinoJson.h>
+
 #include <ArduinoOTA.h>
 #include <ESP8266mDNS.h>
 #include <WiFiUdp.h>
