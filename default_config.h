@@ -17,9 +17,9 @@ int     bass      = 0;
 #define LED_COUNT_WHEEL 9
 #define LED_POWER_ID    10
 
-#define LED_HUE         170
-#define LED_SAT         255
-#define LED_BRIGHT      100
+int     hue           = 170;
+int     sat           = 255;
+#define LED_MAX_BRI     100
 
 // Maintenance
 #define MAINTENANCE_UPTIME_INTERVAL     10
