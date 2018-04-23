@@ -42,14 +42,26 @@ containing/receiving JSON payloads like:
 		"bass": 0.2
 	}
 
+### Light
+
+Control hue and brightness of the volume indicator via
+
+	dersimn/status/DevilRemote_1234567/light
+	dersimn/set   /DevilRemote_1234567/light
+
+containing/receiving JSON payloads like:
+
+	{
+		"val": 1.0,
+		"hue": 0.6
+	}
+
 ### Maintenance topics
 
 	dersimn/maintenance/DevilRemote_1234567/online
 	dersimn/maintenance/DevilRemote_1234567/uptime
 	dersimn/maintenance/DevilRemote_1234567/uptime/ms
 	dersimn/maintenance/DevilRemote_1234567/temperature
-
-using the ESP ID to distinguish topics of multiple devices.
 
 ## Credits
 
