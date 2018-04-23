@@ -49,15 +49,11 @@ const String BOARD_ID = String("DevilRemote_")+ESP_ID;
 char   BOARD_ID_CHAR[50];
 String s = "";
 
-LogMqttModule mqttModule(&mqttClient, s + MQTT_PREFIX + "/status/" + BOARD_ID + "/maintenance/log");
-
 void setup() {
   BOARD_ID.toCharArray(BOARD_ID_CHAR, 50);
   
   Serial.begin(115200);
   logHandler.addModule(&serialModule);
-  mqttModule.setMinimumLogLevel( 2 ); // WARN
-  logHandler.addModule(&mqttModule);
   Log.info("Initializing 'DevilRemote'");
   Log.info( String("ESP ID: ") + ESP_ID );
 
