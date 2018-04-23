@@ -31,7 +31,7 @@ void reconnectFunction() {
 void mqtt_reconnect() {
   LogMqtt.info(s+ "Attempting MQTT connection to " + MQTT_SERVER );
   
-  if ( mqttClient.connect( BOARD_ID_CHAR ) ) {
+  if ( mqtt.connect(BOARD_ID,s+MQTT_PREFIX+"/maintenance/"+BOARD_ID+"/online", 0, true, "false") ) {
     LogMqtt.info(s+ "Connected with ID: " + BOARD_ID );
   } else {
     LogMqtt.error(s+ "Connection failed with rc=" + mqttClient.state() );
