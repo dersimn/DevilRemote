@@ -64,12 +64,14 @@ void setup() {
   setup_WiFi();
   setup_MQTT();
   setup_ArduinoOTA();
-  
+
   setup_VolumeHandler();
   setup_VolumeSync();
 
   setup_Maintanance();
   setup_Sensor_Dallas();
+
+  setuo_FastLED_Network();
 
   Log.info("Setup done");
 }
