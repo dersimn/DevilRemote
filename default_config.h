@@ -1,4 +1,6 @@
 #define MQTT_SERVER     "10.1.1.50"
+#define WIFI_SSID		""
+#define WIFI_PASS		""
 
 #define LED_COUNT       12
 #define LED_COUNT_WHEEL 9

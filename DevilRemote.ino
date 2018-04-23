@@ -13,10 +13,6 @@
 #include <ThreadController.h>
 #include <ThreadRunOnce.h>      // https://github.com/dersimn/ArduinoThreadRunOnce
 
-#include <WiFiManager.h>        // https://github.com/tzapu/WiFiManager
-#include <DNSServer.h>
-#include <ESP8266WebServer.h>
-
 #include <PubSubClient.h>       // https://github.com/knolleary/pubsubclient
 #include <PubSubClientTools.h>  // https://github.com/dersimn/ArduinoPubSubClientTools
 
