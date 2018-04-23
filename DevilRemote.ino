@@ -18,6 +18,7 @@
 #include <ESP8266WebServer.h>
 
 #include <PubSubClient.h>       // https://github.com/knolleary/pubsubclient
+#include <PubSubClientTools.h>  // https://github.com/dersimn/ArduinoPubSubClientTools
 
 #include <ArduinoOTA.h>
 #include <ESP8266mDNS.h>
@@ -40,7 +41,8 @@ NamedLog   LogDallas(logHandler, "Dallas");
 ThreadController threadControl = ThreadController();
 
 WiFiClient espClient;
-PubSubClient mqttClient(espClient);
+PubSubClient mqttClient(MQTT_SERVER, 1883, espClient);
+PubSubClientTools mqtt(mqttClient);
 
 CRGB leds[LED_COUNT];
 

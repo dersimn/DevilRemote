@@ -47,7 +47,7 @@ void output_func() {
   if ( tempC == 85 || tempC == -127 ) {
     LogDallas.warn("Sensor read error");
   } else {
-    mqtt_publish("maintenance/temperature", String(tempC, 2));
+    mqtt.publish("maintenance/temperature", String(tempC, 2));
   }
 }
 
