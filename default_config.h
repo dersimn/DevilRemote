@@ -17,7 +17,7 @@ int     bass      = 0;
 #define LED_COUNT_WHEEL 9
 #define LED_POWER_ID    10
 
-int     hue           = 170;
+int     hue           = 153;
 #define LED_SAT         255
 int     bri           = 100;
 #define LED_MAX_BRI     100
