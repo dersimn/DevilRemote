@@ -3,6 +3,15 @@
 #define WIFI_PASS       ""
 #define MQTT_PREFIX     "dersimn"
 
+// VolumeHandler (default values)
+#define VOLUME_MAX  28
+#define VOLUME_MIN  0
+#define BASS_MAX    5
+#define BASS_MIN    -5
+bool    power     = false;
+int     volume    = 8;
+int     bass      = 0;
+
 // FastLED
 #define LED_COUNT       12
 #define LED_COUNT_WHEEL 9
