@@ -58,7 +58,7 @@ void publishHifi() {
   root["bass"] = rescale(bass, 5, 1.0);
 
   root.printTo(output);
-  mqtt.publish("hifi", output);
+  mqtt.publish("hifi", output, true);
 }
 void val_set(float val) {
   if (val >= 1.0/28) {
