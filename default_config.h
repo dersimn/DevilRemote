@@ -19,6 +19,10 @@
  */
 #define MQTT_PREFIX     "dersimn"
 
+// Maintenance
+#define MAINTENANCE_UPTIME_INTERVAL     10
+#define MAINTENANCE_INFO_INTERVAL       60
+
 // Sensor_Dallas
 #define DS_ONE_WIRE_BUS       D7
 #define DS_MAX_DEVICES        5

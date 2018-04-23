@@ -1,20 +1,26 @@
 Thread uptimeThread = Thread();
 Thread infoThread = Thread();
 
+unsigned long long_uptime;
+
 void setup_Maintanance() {
   uptimeThread.onRun(uptimePublisher);
-  uptimeThread.setInterval(10 * 1000);
+  uptimeThread.setInterval(MAINTENANCE_UPTIME_INTERVAL * 1000);
   threadControl.add(&uptimeThread);
 
   infoThread.onRun(infoPublisher);
-  infoThread.setInterval(60 * 1000);
+  infoThread.setInterval(MAINTENANCE_INFO_INTERVAL * 1000);
   threadControl.add(&infoThread);
+
+  long_uptime = millis() / 1000;
 }
 
 void uptimePublisher() {
   unsigned long time = millis();
+  long_uptime += MAINTENANCE_UPTIME_INTERVAL;
+  
   mqtt.publish("maintenance/uptime/ms", String(time) );
-  mqtt.publish("maintenance/uptime",    String(time/1000) );
+  mqtt.publish("maintenance/uptime",    String(long_uptime) );
 }
 
 void infoPublisher() {
