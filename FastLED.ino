@@ -45,6 +45,7 @@ void publishLight() {
   JsonObject& root = jsonBuffer.createObject();
   root["val"] = rescale(bri, 100, 1.0);
   root["hue"] = rescale(hue, 255, 1.0);
+  root["sat"] = rescale(LED_SAT, 255, 1.0);
 
   root.printTo(output);
   mqtt.publish(s+MQTT_PREFIX+"/status/"+BOARD_ID+"/light", output, true);
