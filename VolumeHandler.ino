@@ -12,10 +12,6 @@ void setup_VolumeHandler() {
 }
 
 void hifi_subscribe(String topic, String message) {
-  if ( message == "ON" )     { power_set(true);  return; }
-  if ( message == "OFF" )    { power_set(false); return; }
-  if ( message == "TOGGLE" ) { power_toggle();   return; }
-
   DynamicJsonBuffer jsonBuffer;
   JsonVariant root = jsonBuffer.parse(message);
 
