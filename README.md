@@ -42,6 +42,8 @@ containing/receiving JSON payloads like:
 		"bass": 0.2
 	}
 
+Since the internal volume range is `0..28`, the datapoint `val` goes in `1/28`-steps. A value `<1/28` will turn off the speaker.
+
 ### Light
 
 Control hue and brightness of the volume indicator via
