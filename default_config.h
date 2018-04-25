@@ -23,11 +23,11 @@ int     bri           = 100;
 #define LED_MAX_BRI     100
 
 // Maintenance
-#define MAINTENANCE_UPTIME_INTERVAL     10
+#define MAINTENANCE_UPTIME_INTERVAL     60
 #define MAINTENANCE_INFO_INTERVAL       60
 
 // Sensor_Dallas
 #define DS_ONE_WIRE_BUS       D7
 #define DS_MAX_DEVICES        5
-#define DS_INTERVAL           10000
+#define DS_INTERVAL           60000
 #define DS_PRECISION          12
