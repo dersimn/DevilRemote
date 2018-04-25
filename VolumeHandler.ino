@@ -15,10 +15,6 @@ void hifi_subscribe(String topic, String message) {
   DynamicJsonBuffer jsonBuffer;
   JsonVariant root = jsonBuffer.parse(message);
 
-  if ( root.is<bool>() ) {
-    power_set( root.as<bool>() );
-    return;
-  }
   if ( root.is<float>() || root.is<int>() ) {
     val_set( root.as<float>() );
     return;
@@ -46,30 +42,7 @@ void publishHifi() {
 }
 void val_set(float val) {
   if ( !inRange(val, 0.0, 1.0) ) return;
-  
-  if (val >= 1.0/28) {
-    power_set(true);
-    volume_set(rescale(val, 1.0, 28));
-  } else {
-    power_set(false);
-  }
-}
-
-bool power_toggle() {
-  power = !power;
-
-  enlightWheel();
-  publishHifi();
-
-  return power;
-}
-bool power_set(bool state) {
-  power = state;
-
-  enlightWheel();
-  publishHifi();
-
-  return power;
+  volume_set(rescale(val, 1.0, 28));
 }
 
 int volume_set(int newVal) {
@@ -77,6 +50,13 @@ int volume_set(int newVal) {
     volume = newVal;
   } else {
     return volume;
+  }
+
+  if (volume == 0) {
+    volume = 1;
+    power = false;
+  } else {
+    power = true;
   }
 
   enlightWheel();
@@ -87,8 +67,14 @@ int volume_set(int newVal) {
 int volume_rotary(int diff) {
   volume = limit( volume+diff, VOLUME_MIN, VOLUME_MAX);
 
-  enlightWheel();
+  if (volume == 0) {
+    volume = 1;
+    power = false;
+  } else {
+    power = true;
+  }
 
+  enlightWheel();
   // When changing volume by rotary, post after 1s to prevent blocking
   publishThread.setRunOnce(1000);
   

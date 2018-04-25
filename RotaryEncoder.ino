@@ -25,7 +25,9 @@ void loop_RotaryEncoder() {
   }
   // software debounce
   if (isButtonPressed) {
-    power_toggle();
+    power = !power;
+    enlightWheel();
+    publishHifi();
     
     isButtonPressed = false;
     lastUpdateMillis = millis();

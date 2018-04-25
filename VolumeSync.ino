@@ -38,11 +38,15 @@ void loop_VolumeSync() {
   
   if ( recv == TURN_ON ) {
     real_power = true;
-    power_set( true );
+    power = true;
+    enlightWheel();
+    publishHifi();
   }
   if ( recv == TURN_OFF ) {
     real_power = false;
-    power_set( false );
+    power = false;
+    enlightWheel();
+    publishHifi();
   }
 }
 
