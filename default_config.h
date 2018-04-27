@@ -29,4 +29,4 @@ int     bri           = 100;
 // Sensor_Dallas
 #define DS_ONE_WIRE_BUS       D7
 #define DS_INTERVAL           60000
-#define DS_PRECISION          12
+#define DS_PRECISION          10
