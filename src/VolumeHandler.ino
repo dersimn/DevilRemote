@@ -12,15 +12,19 @@ void setup_VolumeHandler() {
 }
 
 void hifi_subscribe(String topic, String message) {
-  DynamicJsonBuffer jsonBuffer;
-  JsonVariant root = jsonBuffer.parse(message);
-
-  if ( root.is<float>() || root.is<int>() ) {
-    val_set( root.as<float>() );
+  StaticJsonDocument<500> doc;
+  auto error = deserializeJson(doc, message);
+  if (error) {
+    Log.error(s+"deserializeJson() failed with code "+error.c_str());
     return;
   }
-  if ( root.is<JsonObject>() ) {
-    JsonObject& rootObject = root.as<JsonObject>();
+
+  if ( doc.is<float>() || doc.is<int>() ) {
+    val_set( doc.as<float>() );
+    return;
+  }
+  if ( doc.is<JsonObject>() ) {
+    JsonObject rootObject = doc.as<JsonObject>();
     if ( rootObject.containsKey("val") ) {
       val_set( rootObject["val"].as<float>() );
     }
@@ -30,15 +34,12 @@ void hifi_subscribe(String topic, String message) {
   }
 }
 void publishHifi() {
-  String output;
-  DynamicJsonBuffer jsonBuffer;
+  StaticJsonDocument<500> doc;
+  
+  doc["val"] = (power) ? rescale(volume, 28, 1.0) : 0.0;
+  doc["bass"] = rescale(bass, 5, 1.0);
 
-  JsonObject& root = jsonBuffer.createObject();
-  root["val"] = (power) ? rescale(volume, 28, 1.0) : 0.0;
-  root["bass"] = rescale(bass, 5, 1.0);
-
-  root.printTo(output);
-  mqtt.publish(s+BOARD_ID+"/status/hifi", output, true);
+  mqtt.publish(s+BOARD_ID+"/status/hifi", doc.as<String>(), true);
 }
 void val_set(float val) {
   if ( !inRange(val, 0.0, 1.0) ) return;
