@@ -44,8 +44,11 @@ NamedLog   LogDallas(logHandler, "Dallas");
 
 ThreadController threadControl = ThreadController();
 Thread threadWifi = Thread();
+Thread threadMqtt = Thread();
 
 CRGB leds[LED_COUNT];
+
+void mqttReconnect();
 
 void setup() {
   logHandler.addModule(&serialModule);
@@ -76,8 +79,24 @@ void setup() {
   threadWifi.setInterval(MAINTENANCE_INTERVAL);
   threadControl.add(&threadWifi);
 
-  // -------------------------- MQTT --------------------------  
-  setup_MQTT();
+  // -------------------------- MQTT --------------------------
+  if (WiFi.status() == WL_CONNECTED) {
+    mqttReconnect();
+  }
+  threadMqtt.onRun([](){
+    static auto lastState = mqtt.connected();
+
+    if (lastState && !mqtt.connected()) {
+      LogMqtt(s+"Connection lost");
+    }
+    if (WiFi.status() == WL_CONNECTED && !mqtt.connected()) {
+      mqttReconnect();
+    }
+
+    lastState = mqtt.connected();
+  });
+  threadMqtt.setInterval(MAINTENANCE_INTERVAL);
+  threadControl.add(&threadMqtt);
 
   // -------------------------- OTA --------------------------
   ArduinoOTA.setHostname(BOARD_ID.c_str());
@@ -102,10 +121,23 @@ void loop() {
     Log.info("Entering loop()");
   }
   
-  loop_MQTT();
+  mqttClient.loop();
   loop_RotaryEncoder();
   loop_VolumeSync();
   ArduinoOTA.handle();
 
   threadControl.run();
+}
+
+void mqttReconnect() {
+  LogMqtt.info(s+ "Connecting to "+MQTT_SERVER);
+  
+  if (mqtt.connect(BOARD_ID, s+BOARD_ID+"/maintenance/online", 0, true, "false")) {
+    LogMqtt.info(s+"Connected");
+    mqtt.publish(s+BOARD_ID+"/maintenance/online", "true", true);
+
+    LogMqtt.info(s+"(Re)Subscribed to "+mqtt.resubscribe()+" topics");
+  } else {
+    LogMqtt.error(s+"Connection failed with rc="+mqttClient.state());
+  }
 }
