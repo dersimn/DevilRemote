@@ -7,7 +7,6 @@
 #include <NamedLog.h>
 #include <LogHandler.h>
 #include <LogSerialModule.h>
-#include <LogMqttModule.h>
 
 #include <Thread.h>             // https://github.com/ivanseidel/ArduinoThread
 #include <ThreadController.h>
@@ -19,14 +18,21 @@
 #include <ArduinoJson.h>
 
 #include <ArduinoOTA.h>
-#include <ESP8266mDNS.h>
-#include <WiFiUdp.h>
 
 #include <FastLED.h>            // https://github.com/FastLED/FastLED
 #include <NeoPixelBus.h>        // https://github.com/Makuna/NeoPixelBus
 
 #include <OneWire.h>
 #include <DallasTemperature.h>  // https://github.com/milesburton/Arduino-Temperature-Control-Library
+
+#define BOARD_ID_PREFIX "DevilRemote_"
+const String s = "";
+const String ESP_ID = upperCaseStr(String(ESP.getChipId(), HEX));
+const String BOARD_ID = s+BOARD_ID_PREFIX+ESP_ID;
+
+WiFiClient        espClient;
+PubSubClient      mqttClient(MQTT_SERVER, 1883, espClient);
+PubSubClientTools mqtt(mqttClient);
 
 LogHandler logHandler;
 LogSerialModule serialModule(115200);
@@ -38,24 +44,11 @@ NamedLog   LogDallas(logHandler, "Dallas");
 
 ThreadController threadControl = ThreadController();
 
-WiFiClient espClient;
-PubSubClient mqttClient(MQTT_SERVER, 1883, espClient);
-PubSubClientTools mqtt(mqttClient);
-
 CRGB leds[LED_COUNT];
 
-const String ESP_ID = upperCaseStr(String(ESP.getChipId(), HEX));
-const String BOARD_ID = String("DevilRemote_")+ESP_ID;
-char   BOARD_ID_CHAR[50];
-String s = "";
-
 void setup() {
-  BOARD_ID.toCharArray(BOARD_ID_CHAR, 50);
-  
-  Serial.begin(115200);
   logHandler.addModule(&serialModule);
-  Log.info("Initializing 'DevilRemote'");
-  Log.info( String("ESP ID: ") + ESP_ID );
+  Log.info(s+"Initializing "+BOARD_ID);
 
   // Init Submodules
   setup_FastLED();
@@ -63,7 +56,8 @@ void setup() {
 
   setup_WiFi();
   setup_MQTT();
-  setup_ArduinoOTA();
+  ArduinoOTA.setHostname(BOARD_ID.c_str());
+  ArduinoOTA.begin();
 
   setup_VolumeHandler();
   setup_VolumeSync();
@@ -86,7 +80,7 @@ void loop() {
   loop_MQTT();
   loop_RotaryEncoder();
   loop_VolumeSync();
-  loop_ArduinoOTA();
+  ArduinoOTA.handle();
 
   threadControl.run();
 }
