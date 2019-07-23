@@ -8,7 +8,7 @@ void setup_VolumeHandler() {
   enlightWheel();
   publishHifi();
 
-  mqtt.subscribe(s+MQTT_PREFIX+"/set/"+BOARD_ID+"/hifi", hifi_subscribe);
+  mqtt.subscribe(s+BOARD_ID+"/set/hifi", hifi_subscribe);
 }
 
 void hifi_subscribe(String topic, String message) {
@@ -38,7 +38,7 @@ void publishHifi() {
   root["bass"] = rescale(bass, 5, 1.0);
 
   root.printTo(output);
-  mqtt.publish(s+MQTT_PREFIX+"/status/"+BOARD_ID+"/hifi", output, true);
+  mqtt.publish(s+BOARD_ID+"/status/hifi", output, true);
 }
 void val_set(float val) {
   if ( !inRange(val, 0.0, 1.0) ) return;
