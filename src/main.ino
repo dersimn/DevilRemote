@@ -45,6 +45,7 @@ NamedLog   LogDallas(logHandler, "Dallas");
 ThreadController threadControl = ThreadController();
 Thread threadWifi = Thread();
 Thread threadMqtt = Thread();
+Thread threadUptime = Thread();
 
 CRGB leds[LED_COUNT];
 
@@ -97,6 +98,19 @@ void setup() {
   });
   threadMqtt.setInterval(MAINTENANCE_INTERVAL);
   threadControl.add(&threadMqtt);
+
+  // -------------------------- Uptime --------------------------
+  threadUptime.onRun([](){
+    unsigned long time = millis();
+
+    static unsigned long long_uptime = 0;
+    long_uptime += MAINTENANCE_INTERVAL;
+    
+    mqtt.publish(s+BOARD_ID+"/maintenance/uptime/ms", String(time) );
+    mqtt.publish(s+BOARD_ID+"/maintenance/uptime",    String(long_uptime) );
+  });
+  threadUptime.setInterval(MAINTENANCE_INTERVAL);
+  threadControl.add(&threadUptime);
 
   // -------------------------- OTA --------------------------
   ArduinoOTA.setHostname(BOARD_ID.c_str());
