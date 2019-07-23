@@ -23,6 +23,7 @@ int     bri           = 100;
 #define LED_MAX_BRI     100
 
 // Maintenance
+#define MAINTENANCE_INTERVAL            60*1000
 #define MAINTENANCE_UPTIME_INTERVAL     60
 #define MAINTENANCE_INFO_INTERVAL       60
 
