@@ -26,21 +26,21 @@ After [reverse engineering](https://github.com/dersimn/Teufel-CC-21-RC-Reverse-E
 
 ## Default settings
 
-Currently the MQTT server IP and Wifi credentials are hard-coded in `default_config.h`. You can also choose an prefix for your MQTT topics.
+Currently the MQTT server IP and Wifi credentials are hard-coded in `default_config.h`.
 
 ### Default topics
 
 The default topics are
 
-	dersimn/status/DevilRemote_1234567/hifi
-	dersimn/set   /DevilRemote_1234567/hifi
+    DevilRemote_1234567/status/hifi
+    DevilRemote_1234567/set   /hifi
 
 containing/receiving JSON payloads like:
 
-	{
-		"val": 0.22,
-		"bass": 0.2
-	}
+    {
+        "val": 0.22,
+        "bass": 0.2
+    }
 
 Since the internal volume range is `0..28`, the datapoint `val` goes in `1/28`-steps. A value `<1/28` will turn off the speaker.
 
@@ -48,22 +48,38 @@ Since the internal volume range is `0..28`, the datapoint `val` goes in `1/28`-s
 
 Control hue and brightness of the volume indicator via
 
-	dersimn/status/DevilRemote_1234567/light
-	dersimn/set   /DevilRemote_1234567/light
+    DevilRemote_1234567/status/light
+    DevilRemote_1234567/set   /light
 
 containing/receiving JSON payloads like:
 
-	{
-		"val": 1.0,
-		"hue": 0.6
-	}
+    {
+        "val": 1.0,
+        "hue": 0.6
+    }
 
 ### Maintenance topics
 
-	dersimn/maintenance/DevilRemote_1234567/online
-	dersimn/maintenance/DevilRemote_1234567/uptime
-	dersimn/maintenance/DevilRemote_1234567/uptime/ms
-	dersimn/maintenance/DevilRemote_1234567/temperature
+    DevilRemote_1234567/maintenance/online
+    DevilRemote_1234567/maintenance/uptime
+    DevilRemote_1234567/maintenance/uptime/ms
+    DevilRemote_1234567/maintenance/temperature
+
+## Install
+
+Install using [PlatformIO CLI](https://docs.platformio.org/en/latest/installation.html).  
+Clone this repository, `cd` into it.  
+If you're not using a Wemos D1 Mini, edit `platformio.ini` first.  
+
+Run:
+
+    platformio run -t upload
+
+For OTA upload:
+
+    platformio run -t upload --upload-port DevilRemote_1234567.local
+
+
 
 ## Credits
 
