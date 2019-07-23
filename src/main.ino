@@ -43,6 +43,7 @@ NamedLog   LogMqtt(logHandler, "MQTT");
 NamedLog   LogDallas(logHandler, "Dallas");
 
 ThreadController threadControl = ThreadController();
+Thread threadWifi = Thread();
 
 CRGB leds[LED_COUNT];
 
@@ -50,15 +51,39 @@ void setup() {
   logHandler.addModule(&serialModule);
   Log.info(s+"Initializing "+BOARD_ID);
 
-  // Init Submodules
+  // -------------------------- App Important --------------------------
   setup_FastLED();
   setup_RotaryEncoder();
 
-  setup_WiFi();
+  // -------------------------- Wifi --------------------------
+  LogWiFi.info(s+"Connecting to SSID: "+WIFI_SSID);
+  WiFi.mode(WIFI_STA);
+  WiFi.softAPdisconnect(true);
+  WiFi.hostname(BOARD_ID);
+  WiFi.begin(WIFI_SSID, WIFI_PASS);
+
+  threadWifi.onRun([](){
+    static auto lastState = WiFi.status();
+
+    if (WiFi.status() != WL_CONNECTED && lastState == WL_CONNECTED) {
+      LogWiFi.warn("Connection lost");
+    } else if (WiFi.status() == WL_CONNECTED && lastState != WL_CONNECTED) {
+      LogWiFi.info(s+"(Re)connected with IP: "+WiFi.localIP().toString() );
+    }
+
+    lastState = WiFi.status();
+  });
+  threadWifi.setInterval(MAINTENANCE_INTERVAL);
+  threadControl.add(&threadWifi);
+
+  // -------------------------- MQTT --------------------------  
   setup_MQTT();
+
+  // -------------------------- OTA --------------------------
   ArduinoOTA.setHostname(BOARD_ID.c_str());
   ArduinoOTA.begin();
 
+  // -------------------------- App --------------------------
   setup_VolumeHandler();
   setup_VolumeSync();
 
