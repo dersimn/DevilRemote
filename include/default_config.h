@@ -1,7 +1,6 @@
 #define MQTT_SERVER     "10.1.1.50"
 #define WIFI_SSID       ""
 #define WIFI_PASS       ""
-#define MQTT_PREFIX     "dersimn"
 
 // VolumeHandler (default values)
 #define VOLUME_MAX  28
@@ -14,8 +13,8 @@ int     bass      = 0;
 
 // FastLED
 #define LED_COUNT       12
-#define LED_COUNT_WHEEL 9
-#define LED_POWER_ID    10
+#define LED_COUNT_WHEEL (LED_COUNT - 3)
+#define LED_POWER_ID    (LED_COUNT - 2)
 
 int     hue           = 153;
 #define LED_SAT         255
