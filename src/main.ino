@@ -80,6 +80,10 @@ void setup() {
   threadWifi.setInterval(MAINTENANCE_INTERVAL);
   threadControl.add(&threadWifi);
 
+  // -------------------------- OTA --------------------------
+  ArduinoOTA.setHostname(BOARD_ID.c_str());
+  ArduinoOTA.begin();
+
   // -------------------------- MQTT --------------------------
   if (WiFi.status() == WL_CONNECTED) {
     mqttReconnect();
@@ -112,10 +116,6 @@ void setup() {
   threadUptime.setInterval(MAINTENANCE_INTERVAL);
   threadControl.add(&threadUptime);
 
-  // -------------------------- OTA --------------------------
-  ArduinoOTA.setHostname(BOARD_ID.c_str());
-  ArduinoOTA.begin();
-
   // -------------------------- App --------------------------
   setup_VolumeHandler();
   setup_VolumeSync();
@@ -129,18 +129,13 @@ void setup() {
 }
 
 void loop() {
-  static bool enteredLoop = false;
-  if ( !enteredLoop ) {
-    enteredLoop = true;
-    Log.info("Entering loop()");
-  }
-  
+  threadControl.run();
+
+  ArduinoOTA.handle();
   mqttClient.loop();
+
   loop_RotaryEncoder();
   loop_VolumeSync();
-  ArduinoOTA.handle();
-
-  threadControl.run();
 }
 
 void mqttReconnect() {
