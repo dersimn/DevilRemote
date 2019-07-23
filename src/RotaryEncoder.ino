@@ -5,7 +5,7 @@ Encoder myEnc(D3, D2);
 bool isButtonPressed;
 long lastUpdateMillis = 0;
 
-void handleKey() {
+void ICACHE_RAM_ATTR handleKey() {
   if ( millis() - lastUpdateMillis > 500 ) {
     isButtonPressed = true;
   }
