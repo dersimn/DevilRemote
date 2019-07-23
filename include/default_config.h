@@ -28,6 +28,6 @@ int     bri           = 100;
 #define MAINTENANCE_INFO_INTERVAL       60
 
 // Sensor_Dallas
-#define DS_ONE_WIRE_BUS       D7
-#define DS_INTERVAL           60000
-#define DS_PRECISION          10
+#define SDS_ONE_WIRE_BUS       D7
+#define SDS_INTERVAL           60000
+#define SDS_PRECISION          10

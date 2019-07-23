@@ -121,7 +121,7 @@ void setup() {
   setup_VolumeSync();
 
   setup_Maintanance();
-  setup_Sensor_Dallas();
+  setup_Sensor_SingleDallas();
 
   setuo_FastLED_Network();
 

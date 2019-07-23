@@ -1,15 +1,15 @@
-Thread meassureThread = Thread();
-ThreadRunOnce outputThread = ThreadRunOnce();
+Thread singleMeassureThread = Thread();
+ThreadRunOnce singleOutputThread = ThreadRunOnce();
 
-OneWire oneWire(DS_ONE_WIRE_BUS);
-DallasTemperature sensors(&oneWire);
+OneWire singeOneWire(SDS_ONE_WIRE_BUS);
+DallasTemperature singleSensors(&singeOneWire);
 
 DeviceAddress insideThermometer;
 
-void setup_Sensor_Dallas() {
+void setup_Sensor_SingleDallas() {
   LogDallas.info("Detecting Temperature ICs");
-  sensors.begin();
-  int device_count = sensors.getDeviceCount();
+  singleSensors.begin();
+  int device_count = singleSensors.getDeviceCount();
 
   // Debug out
   if ( device_count != 0 ) {
@@ -17,37 +17,33 @@ void setup_Sensor_Dallas() {
   } else {
     LogDallas.warn("No devices found");
   }
-  LogDallas.info(s+"Parasite power is: " + ((sensors.isParasitePowerMode()) ? "ON" : "OFF")); 
+  LogDallas.info(s+"Parasite power is: " + ((singleSensors.isParasitePowerMode()) ? "ON" : "OFF")); 
 
-  if (!sensors.getAddress(insideThermometer, 0)) {
+  if (!singleSensors.getAddress(insideThermometer, 0)) {
     LogDallas.error(s+"Unable to find address for device");
   }
 
   // set the resolution per device
-  sensors.setResolution(insideThermometer, DS_PRECISION);
+  singleSensors.setResolution(insideThermometer, SDS_PRECISION);
 
   // Non-blocking temperature reads
-  sensors.setWaitForConversion(false);
+  singleSensors.setWaitForConversion(false);
 
-  meassureThread.onRun(measure_func);
-  meassureThread.setInterval(DS_INTERVAL);
-  threadControl.add(&meassureThread);
+  singleMeassureThread.onRun([](){
+    singleSensors.requestTemperatures();
+    singleOutputThread.setRunOnce(2000);
+  });
+  singleMeassureThread.setInterval(SDS_INTERVAL);
+  threadControl.add(&singleMeassureThread);
 
-  outputThread.onRun(output_func);
-  outputThread.enabled = false;
-  threadControl.add(&outputThread);
+  singleOutputThread.onRun([](){
+    float tempC = singleSensors.getTempC(insideThermometer);
+    if ( tempC == 85 || tempC == -127 ) {
+      LogDallas.warn("Sensor read error");
+    } else {
+      mqtt.publish(s+BOARD_ID+"/maintenance/temperature", String(tempC, 2));
+    }
+  });
+  singleOutputThread.enabled = false;
+  threadControl.add(&singleOutputThread);
 }
-
-void measure_func() {
-  sensors.requestTemperatures();
-  outputThread.setRunOnce(2000);
-}
-void output_func() {
-  float tempC = sensors.getTempC(insideThermometer);
-  if ( tempC == 85 || tempC == -127 ) {
-    LogDallas.warn("Sensor read error");
-  } else {
-    mqtt.publish(s+MQTT_PREFIX+"/maintenance/"+BOARD_ID+"/temperature", String(tempC, 2));
-  }
-}
-
