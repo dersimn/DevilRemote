@@ -105,13 +105,18 @@ void setup() {
 
   // -------------------------- Uptime --------------------------
   threadUptime.onRun([](){
-    unsigned long time = millis();
+    StaticJsonDocument<500> doc;
+    static uint64_t longterm_millis;
+    static uint32_t last_millis;
 
-    static unsigned long long_uptime = 0;
-    long_uptime += MAINTENANCE_INTERVAL;
-    
-    mqtt.publish(s+BOARD_ID+"/maintenance/uptime/ms", String(time) );
-    mqtt.publish(s+BOARD_ID+"/maintenance/uptime",    String(long_uptime) );
+    uint32_t this_millis = millis();
+    longterm_millis += this_millis - last_millis;
+    last_millis = this_millis;
+
+    doc["val"] = longterm_millis;
+    doc["millis"] = this_millis;
+
+    mqtt.publish(s+BOARD_ID+"/maintenance/uptime", doc.as<String>());
   });
   threadUptime.setInterval(MAINTENANCE_INTERVAL);
   threadControl.add(&threadUptime);
