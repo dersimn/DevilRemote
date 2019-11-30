@@ -108,13 +108,16 @@ void setup() {
     StaticJsonDocument<500> doc;
     static uint64_t longterm_millis;
     static uint32_t last_millis;
+    static uint32_t rollover_count;
 
     uint32_t this_millis = millis();
     longterm_millis += this_millis - last_millis;
+    if (last_millis > this_millis) rollover_count++;
     last_millis = this_millis;
 
     doc["val"] = longterm_millis;
     doc["millis"] = this_millis;
+    doc["rollover"] = rollover_count;
 
     mqtt.publish(s+BOARD_ID+"/maintenance/uptime", doc.as<String>());
   });
