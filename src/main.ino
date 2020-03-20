@@ -43,9 +43,9 @@ NamedLog   LogMqtt(logHandler, "MQTT");
 NamedLog   LogDallas(logHandler, "Dallas");
 
 ThreadController threadControl = ThreadController();
-Thread threadWifi = Thread();
 Thread threadMqtt = Thread();
 Thread threadUptime = Thread();
+ThreadRunOnce threadMqttRunOnce = ThreadRunOnce();
 
 CRGB leds[LED_COUNT];
 
@@ -53,38 +53,47 @@ void mqttReconnect();
 
 void setup() {
   logHandler.addModule(&serialModule);
+  Serial.println();
   Log.info(s+"Initializing "+BOARD_ID);
+  Log.info(s+"Git HASH: "+GIT_HASH);
+  Log.info(s+"Git Tag/Branch: "+GIT_TAG_OR_BRANCH);
+  Log.info(s+"Build timestamp: "+BUILD_TIMESTAMP);
 
   // -------------------------- App Important --------------------------
   setup_FastLED();
   setup_RotaryEncoder();
+
+  // -------------------------- MQTT (1) --------------------------
+  threadMqttRunOnce.onRun([](){
+    if (WiFi.status() == WL_CONNECTED && !mqtt.connected()) {
+      mqttReconnect();
+    }
+  });
+  threadControl.add(&threadMqttRunOnce);
 
   // -------------------------- Wifi --------------------------
   LogWiFi.info(s+"Connecting to SSID: "+WIFI_SSID);
   WiFi.mode(WIFI_STA);
   WiFi.softAPdisconnect(true);
   WiFi.hostname(BOARD_ID);
-  WiFi.begin(WIFI_SSID, WIFI_PASS);
 
-  threadWifi.onRun([](){
-    static auto lastState = WiFi.status();
-
-    if (WiFi.status() != WL_CONNECTED && lastState == WL_CONNECTED) {
-      LogWiFi.warn("Connection lost");
-    } else if (WiFi.status() == WL_CONNECTED && lastState != WL_CONNECTED) {
-      LogWiFi.info(s+"(Re)connected with IP: "+WiFi.localIP().toString() );
-    }
-
-    lastState = WiFi.status();
+  static WiFiEventHandler gotIpEventHandler = WiFi.onStationModeGotIP([](const WiFiEventStationModeGotIP& event) {
+    LogWiFi.info(s+"(Re)connected with IP: "+WiFi.localIP().toString());
+    threadMqttRunOnce.setRunOnce(3000);
   });
-  threadWifi.setInterval(MAINTENANCE_INTERVAL);
-  threadControl.add(&threadWifi);
+
+  static WiFiEventHandler disconnectedEventHandler = WiFi.onStationModeDisconnected([](const WiFiEventStationModeDisconnected& event) {
+    LogWiFi.warn("Connection lost");
+    digitalWrite(STATUS_LED_PIN, LOW);
+  });
+
+  WiFi.begin(WIFI_SSID, WIFI_PASS);
 
   // -------------------------- OTA --------------------------
   ArduinoOTA.setHostname(BOARD_ID.c_str());
   ArduinoOTA.begin();
 
-  // -------------------------- MQTT --------------------------
+  // -------------------------- MQTT (2) --------------------------
   if (WiFi.status() == WL_CONNECTED) {
     mqttReconnect();
   }
