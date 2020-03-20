@@ -25,10 +25,10 @@
 #include <OneWire.h>
 #include <DallasTemperature.h>  // https://github.com/milesburton/Arduino-Temperature-Control-Library
 
-#define BOARD_ID_PREFIX "DevilRemote_"
+#define APP_PREFIX "DevilRemote_"
 const String s = "";
 const String ESP_ID = upperCaseStr(String(ESP.getChipId(), HEX));
-const String BOARD_ID = s+BOARD_ID_PREFIX+ESP_ID;
+const String BOARD_ID = s+APP_PREFIX+"_"+ESP_ID;
 
 WiFiClient        espClient;
 PubSubClient      mqttClient(MQTT_SERVER, 1883, espClient);
@@ -128,7 +128,7 @@ void setup() {
     doc["millis"] = this_millis;
     doc["rollover"] = rollover_count;
 
-    mqtt.publish(s+BOARD_ID+"/maintenance/uptime", doc.as<String>());
+    mqtt.publish(s+APP_PREFIX+"/maintenance/"+ESP_ID+"/uptime", doc.as<String>());
   });
   threadUptime.setInterval(MAINTENANCE_INTERVAL);
   threadControl.add(&threadUptime);
@@ -158,9 +158,9 @@ void loop() {
 void mqttReconnect() {
   LogMqtt.info(s+ "Connecting to "+MQTT_SERVER);
   
-  if (mqtt.connect(BOARD_ID, s+BOARD_ID+"/maintenance/online", 0, true, "false")) {
+  if (mqtt.connect(BOARD_ID, s+APP_PREFIX+"/maintenance/"+ESP_ID+"/online", 0, true, "false")) {
     LogMqtt.info(s+"Connected");
-    mqtt.publish(s+BOARD_ID+"/maintenance/online", "true", true);
+    mqtt.publish(s+APP_PREFIX+"/maintenance/"+ESP_ID+"/online", "true", true);
 
     LogMqtt.info(s+"(Re)Subscribed to "+mqtt.resubscribe()+" topics");
   } else {

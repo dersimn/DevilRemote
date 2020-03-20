@@ -41,7 +41,7 @@ void setup_Sensor_SingleDallas() {
     if ( tempC == 85 || tempC == -127 ) {
       LogDallas.warn("Sensor read error");
     } else {
-      mqtt.publish(s+BOARD_ID+"/maintenance/temperature", String(tempC, 2));
+      mqtt.publish(s+APP_PREFIX+"/maintenance/"+ESP_ID+"/temperature", String(tempC, 2));
     }
   });
   singleOutputThread.enabled = false;
