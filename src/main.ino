@@ -25,7 +25,7 @@
 #include <OneWire.h>
 #include <DallasTemperature.h>  // https://github.com/milesburton/Arduino-Temperature-Control-Library
 
-#define APP_PREFIX "DevilRemote_"
+#define APP_PREFIX "DevilRemote"
 const String s = "";
 const String ESP_ID = upperCaseStr(String(ESP.getChipId(), HEX));
 const String BOARD_ID = s+APP_PREFIX+"_"+ESP_ID;
