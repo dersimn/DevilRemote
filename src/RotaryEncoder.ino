@@ -1,6 +1,6 @@
 #include <Encoder.h>
 
-Encoder myEnc(D3, D2);
+Encoder myEnc(ROTARY_PIN_A, ROTARY_PIN_B);
 
 bool isButtonPressed;
 long lastUpdateMillis = 0;
@@ -12,8 +12,8 @@ void ICACHE_RAM_ATTR handleKey() {
 }
 
 void setup_RotaryEncoder() {
-  pinMode(D4, INPUT_PULLUP);
-  attachInterrupt(D4, handleKey, RISING);
+  pinMode(ROTARY_BUTTON, INPUT_PULLUP);
+  attachInterrupt(ROTARY_BUTTON, handleKey, RISING);
 }
 
 void loop_RotaryEncoder() {

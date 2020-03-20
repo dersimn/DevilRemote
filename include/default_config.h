@@ -28,3 +28,11 @@ int     bri           = 100;
 #define SDS_ONE_WIRE_BUS       D7
 #define SDS_INTERVAL           60000
 #define SDS_PRECISION          10
+
+// Pinout
+#define SOFTSERIAL_RX   D5
+#define SOFTSERIAL_TX   D6
+
+#define ROTARY_PIN_A    D3
+#define ROTARY_PIN_B    D2
+#define ROTARY_BUTTON   D4

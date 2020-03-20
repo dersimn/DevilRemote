@@ -7,7 +7,7 @@
 #define BASS_UP       164
 #define BASS_DOWN     165
 
-SoftwareSerial softSerial(D5,D6);
+SoftwareSerial softSerial(SOFTSERIAL_RX, SOFTSERIAL_TX);
 Thread syncVolumeThread = Thread();
 Thread syncPowerThread = Thread();
 ThreadRunOnce enableVolumeSyncThread = ThreadRunOnce();
