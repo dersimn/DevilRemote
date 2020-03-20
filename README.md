@@ -32,8 +32,8 @@ Currently the MQTT server IP and Wifi credentials are hard-coded in `default_con
 
 The default topics are
 
-    DevilRemote_1234567/status/hifi
-    DevilRemote_1234567/set   /hifi
+    DevilRemote/status/1234567/hifi
+    DevilRemote/set   /1234567/hifi
 
 containing/receiving JSON payloads like:
 
@@ -48,8 +48,8 @@ Since the internal volume range is `0..28`, the datapoint `val` goes in `1/28`-s
 
 Control hue and brightness of the volume indicator via
 
-    DevilRemote_1234567/status/light
-    DevilRemote_1234567/set   /light
+    DevilRemote/status/1234567/light
+    DevilRemote/set   /1234567/light
 
 containing/receiving JSON payloads like:
 
@@ -60,10 +60,10 @@ containing/receiving JSON payloads like:
 
 ### Maintenance topics
 
-    DevilRemote_1234567/maintenance/online
-    DevilRemote_1234567/maintenance/uptime
-    DevilRemote_1234567/maintenance/uptime/ms
-    DevilRemote_1234567/maintenance/temperature
+    DevilRemote/maintenance/1234567/online      -> true
+    DevilRemote/maintenance/1234567/uptime      -> {"val":83000243,"millis":83000243,"rollover":0}
+    DevilRemote/maintenance/1234567/temperature -> 26.00
+    DevilRemote/maintenance/1234567/info        -> {"board_id":"DevilRemote_1234567","build_hash":"4d8757f461b1902d81cfc2f89132d4d44692444c","build_tag":"master","build_timestamp":1584714256,"ip_address":"10.1.1.108"}
 
 ## Install
 
@@ -79,6 +79,12 @@ For OTA upload:
 
     platformio run -t upload --upload-port DevilRemote_1234567.local
 
+## Development
+
+Ideas:
+
+- Replace FastLED with [WS2812FX](https://github.com/kitesurfer1404/WS2812FX) and make use of [segments](https://github.com/kitesurfer1404/WS2812FX/blob/master/examples/ws2812fx_segments/ws2812fx_segments.ino)
+- Make a class from VolumeSync.ino
 
 
 ## Credits
