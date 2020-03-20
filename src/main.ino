@@ -84,7 +84,6 @@ void setup() {
 
   static WiFiEventHandler disconnectedEventHandler = WiFi.onStationModeDisconnected([](const WiFiEventStationModeDisconnected& event) {
     LogWiFi.warn("Connection lost");
-    digitalWrite(STATUS_LED_PIN, LOW);
   });
 
   WiFi.begin(WIFI_SSID, WIFI_PASS);
@@ -160,7 +159,6 @@ void mqttReconnect() {
   
   if (mqtt.connect(BOARD_ID, s+APP_PREFIX+"/maintenance/"+ESP_ID+"/online", 0, true, "false")) {
     LogMqtt.info(s+"Connected and (re)subscribed to "+mqtt.resubscribe()+" topic(s)");
-    digitalWrite(STATUS_LED_PIN, HIGH);
 
     mqtt.publish(s+APP_PREFIX+"/maintenance/"+ESP_ID+"/online", "true", true);
 
