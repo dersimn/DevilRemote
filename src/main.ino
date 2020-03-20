@@ -159,10 +159,21 @@ void mqttReconnect() {
   LogMqtt.info(s+ "Connecting to "+MQTT_SERVER);
   
   if (mqtt.connect(BOARD_ID, s+APP_PREFIX+"/maintenance/"+ESP_ID+"/online", 0, true, "false")) {
-    LogMqtt.info(s+"Connected");
+    LogMqtt.info(s+"Connected and (re)subscribed to "+mqtt.resubscribe()+" topic(s)");
+    digitalWrite(STATUS_LED_PIN, HIGH);
+
     mqtt.publish(s+APP_PREFIX+"/maintenance/"+ESP_ID+"/online", "true", true);
 
-    LogMqtt.info(s+"(Re)Subscribed to "+mqtt.resubscribe()+" topics");
+    // Post static info once every (re)connect
+    StaticJsonDocument<500> doc;
+
+    doc["board_id"] = BOARD_ID;
+    doc["build_hash"] = GIT_HASH;
+    doc["build_tag"] = GIT_TAG_OR_BRANCH;
+    doc["build_timestamp"] = BUILD_TIMESTAMP;
+    doc["ip_address"] = WiFi.localIP().toString();
+
+    mqtt.publish(s+APP_PREFIX+"/maintenance/"+ESP_ID+"/info", doc.as<String>(), true);
   } else {
     LogMqtt.error(s+"Connection failed with rc="+mqttClient.state());
   }
