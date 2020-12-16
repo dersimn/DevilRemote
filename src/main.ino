@@ -172,6 +172,9 @@ void mqttReconnect() {
     doc["ip_address"] = WiFi.localIP().toString();
 
     mqtt.publish(s+APP_PREFIX+"/maintenance/"+ESP_ID+"/info", doc.as<String>(), true);
+
+    // Post current state
+    publishLight();
   } else {
     LogMqtt.error(s+"Connection failed with rc="+mqttClient.state());
   }
