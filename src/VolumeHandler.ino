@@ -7,7 +7,7 @@ void setup_VolumeHandler() {
   // Englight after initializing
   enlightWheel();
 
-  mqtt.subscribe(s+APP_PREFIX+"/set/"+ESP_ID+"/hifi", hifi_subscribe);
+  mqtt.subscribe(s+MQTT_PREFIX+"/set/hifi", hifi_subscribe);
 }
 
 void hifi_subscribe(String topic, String message) {
@@ -38,7 +38,7 @@ void publishHifi() {
   doc["val"] = (power) ? rescale(volume, 28, 1.0) : 0.0;
   doc["bass"] = rescale(bass, 5, 1.0);
 
-  mqtt.publish(s+APP_PREFIX+"/status/"+ESP_ID+"/hifi", doc.as<String>(), true);
+  mqtt.publish(s+MQTT_PREFIX+"/status/hifi", doc.as<String>(), true);
 }
 void val_set(float val) {
   if ( !inRange(val, 0.0, 1.0) ) return;

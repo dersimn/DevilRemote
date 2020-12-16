@@ -29,6 +29,7 @@
 const String s = "";
 const String ESP_ID = upperCaseStr(String(ESP.getChipId(), HEX));
 const String BOARD_ID = s+APP_PREFIX+"_"+ESP_ID;
+const String MQTT_PREFIX = s+"dersimn/"+APP_PREFIX+"/"+ESP_ID;
 
 WiFiClient        espClient;
 PubSubClient      mqttClient(MQTT_SERVER, 1883, espClient);
@@ -127,7 +128,7 @@ void setup() {
     doc["millis"] = this_millis;
     doc["rollover"] = rollover_count;
 
-    mqtt.publish(s+APP_PREFIX+"/maintenance/"+ESP_ID+"/uptime", doc.as<String>());
+    mqtt.publish(s+MQTT_PREFIX+"/maintenance/uptime", doc.as<String>());
   });
   threadUptime.setInterval(MAINTENANCE_INTERVAL);
   threadControl.add(&threadUptime);
@@ -157,10 +158,10 @@ void loop() {
 void mqttReconnect() {
   LogMqtt.info(s+ "Connecting to "+MQTT_SERVER);
   
-  if (mqtt.connect(BOARD_ID, s+APP_PREFIX+"/maintenance/"+ESP_ID+"/online", 0, true, "false")) {
+  if (mqtt.connect(BOARD_ID, s+MQTT_PREFIX+"/online", 0, true, "false")) {
     LogMqtt.info(s+"Connected and (re)subscribed to "+mqtt.resubscribe()+" topic(s)");
 
-    mqtt.publish(s+APP_PREFIX+"/maintenance/"+ESP_ID+"/online", "true", true);
+    mqtt.publish(s+MQTT_PREFIX+"/online", "true", true);
 
     // Post static Info Data once every (Re)connect
     // Info
