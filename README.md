@@ -24,48 +24,49 @@ After [reverse engineering](https://github.com/dersimn/Teufel-CC-21-RC-Reverse-E
 - [Cable gland](https://www.conrad.de/de/kabelverschraubung-m12-polyamid-schwarz-wiska-eskv-m12-ral-9005-1-st-532220.html) + [Locknut](https://www.conrad.de/de/gegenmutter-m12-polyamid-schwarz-wiska-emug-m12-ral-9005-1-st-532271.html)
 - [250mA Fuse](https://www.conrad.de/de/picofuse-kleinstsicherung-axial-bedrahtet-rund-250-ma-125-v-flink-f-eska-823611-1-st-529666.html)
 
-## Default settings
+## Settings
 
 Currently the MQTT server IP and Wifi credentials are hard-coded in `default_config.h`.
 
-### Default topics
+### Topics
 
-The default topics are
-
-    DevilRemote/status/1234567/hifi
-    DevilRemote/set   /1234567/hifi
-
-containing/receiving JSON payloads like:
-
-    {
-        "val": 0.22,
-        "bass": 0.2
+```
+dersimn/DevilRemote/291928/status/hifi → {
+      "val": 0.1,
+      "bass": 0
     }
 
-Since the internal volume range is `0..28`, the datapoint `val` goes in `1/28`-steps. A value `<1/28` will turn off the speaker.
-
-### Light
-
-Control hue and brightness of the volume indicator via
-
-    DevilRemote/status/1234567/light
-    DevilRemote/set   /1234567/light
-
-containing/receiving JSON payloads like:
-
-    {
-        "val": 1.0,
-        "hue": 0.6
+dersimn/DevilRemote/291928/status/light → {
+      "val": 1.0,
+      "hue": 0.6
     }
 
-### Maintenance topics
+dersimn/DevilRemote/1234567/online → true
 
-    DevilRemote/maintenance/1234567/online      -> true
-    DevilRemote/maintenance/1234567/uptime      -> {"val":83000243,"millis":83000243,"rollover":0}
-    DevilRemote/maintenance/1234567/temperature -> 26.00
-    DevilRemote/maintenance/1234567/info        -> {"board_id":"DevilRemote_1234567","build_hash":"4d8757f461b1902d81cfc2f89132d4d44692444c","build_tag":"master","build_timestamp":1584714256,"ip_address":"10.1.1.108"}
+dersimn/DevilRemote/1234567/maintenance/uptime → {
+      "val": 83000243,
+      "millis": 83000243,
+      "rollover": 0
+    }
 
-## Install
+dersimn/DevilRemote/1234567/maintenance/temperature → 26.00
+
+dersimn/DevilRemote/1234567/maintenance/info → {
+      "board": {
+        "board-id": "DevilRemote_1234567",
+        "ip-address": "10.1.1.120",
+        "wifi-ssid": "HMA-AP"
+      },
+      "build": {
+        "git-hash": "50a98137849298def9871663b258808c055cc17f",
+        "git-tag": "v1.1.0",
+        "build-timestamp": 1608134219
+      }
+    }
+
+```
+
+## Flash
 
 Install using [PlatformIO CLI](https://docs.platformio.org/en/latest/installation.html).  
 Clone this repository, `cd` into it.  
@@ -73,11 +74,17 @@ If you're not using a Wemos D1 Mini, edit `platformio.ini` first.
 
 Run:
 
-    platformio run -t upload
+    pplatformio run
 
-For OTA upload:
+In case you have multiple USB-Serial adapters, or your adapter offers multiple ports:
 
-    platformio run -t upload --upload-port DevilRemote_1234567.local
+    platformio device list
+    platformio run --upload-port /dev/cu.usbserial-00202102A 
+
+For WiFi OTA upload:
+
+    platformio device list --mdns
+    platformio run -t upload --upload-port <DevilRemote_1234567.local or IP address>
 
 ## Development
 
