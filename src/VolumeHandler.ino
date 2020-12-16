@@ -4,9 +4,8 @@ void setup_VolumeHandler() {
   publishThread.onRun(publishHifi);
   threadControl.add(&publishThread);
 
-  // Post & Englight after initializing
+  // Englight after initializing
   enlightWheel();
-  publishHifi();
 
   mqtt.subscribe(s+APP_PREFIX+"/set/"+ESP_ID+"/hifi", hifi_subscribe);
 }

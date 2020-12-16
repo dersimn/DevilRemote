@@ -175,6 +175,7 @@ void mqttReconnect() {
 
     // Post current state
     publishLight();
+    publishHifi();
   } else {
     LogMqtt.error(s+"Connection failed with rc="+mqttClient.state());
   }
