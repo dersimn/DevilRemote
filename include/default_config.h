@@ -22,12 +22,12 @@ int     bri           = 100;
 #define LED_MAX_BRI     100
 
 // Maintenance
-#define MAINTENANCE_INTERVAL            60*1000
+#define MAINTENANCE_INTERVAL    (60*1000)
 
 // Sensor_Dallas
-#define SDS_ONE_WIRE_BUS       D7
-#define SDS_INTERVAL           60000
-#define SDS_PRECISION          10
+#define SDS_ONE_WIRE_BUS    D7
+#define SDS_INTERVAL        (60*1000)
+#define SDS_PRECISION       10
 
 // Pinout
 #define SOFTSERIAL_RX   D5
